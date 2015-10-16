@@ -57,7 +57,6 @@ Plugin 'bling/vim-airline'
 " Plugin 'Shutnik/jshint2.vim'
 Plugin 'mattn/emmet-vim'
 " Plugin 'Valloric/MatchTagAlways'
-" Plugin 'mustache/vim-mustache-handlebars'
 Plugin 'othree/html5.vim'
 Plugin 'tpope/vim-unimpaired'
 " Plugin 'groenewege/vim-less'
@@ -67,9 +66,7 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'Glench/Vim-Jinja2-Syntax'
 Plugin 'blueyed/smarty.vim'
 Plugin 'nginx.vim'
-Plugin 'MPiccinato/wombat256'
 Plugin 'editorconfig/editorconfig-vim'
-Plugin 'chriskempson/base16-vim'
 Plugin 'jaxbot/syntastic-react'
 Plugin 'mxw/vim-jsx'
 
@@ -81,6 +78,8 @@ let g:mta_filetypes = { 'html' : 1, 'xhtml' : 1, 'xml' : 1, 'jinja' : 1, 'smarty
 let g:user_emmet_expandabbr_key = '<C-Z>'
 let g:use_emmet_complete_tag = 1
 let g:airline#extensions#tabline#enabled = 1
+let g:javascript_enable_domhtmlcss = 1
+let g:syntastic_javascript_checkers = ['eslint']
 
 "### Remappings ###"
 
@@ -109,8 +108,6 @@ nnoremap <F5> :!php -l %<CR>
 nnoremap <F7> mzgg=G`z<CR>
 
 set matchtime=0
-" let g:jsx_ext_required = 0
-let g:javascript_enable_domhtmlcss = 1
 
 autocmd BufWinEnter /etc/nginx/*.conf setfiletype nginx
 
@@ -128,6 +125,9 @@ endif
 " Improved tab completion (:tabe awd<tab>)
 set wildmode=longest,list,full
 set wildmenu
+
+" For tmux
+set lazyredraw
 
 " Lews
 autocmd BufWritePost ~/static.tek.no/*.less silent !echo -ne '<afile>:p' | nc -U ~/static.tek.no/lews.sock
