@@ -1,11 +1,6 @@
 " Martins .vsvimrc (vimrc for Visual Studio)
 " (https://github.com/jaredpar/VsVim)
 
-" Remap Esc to Tab
-nnoremap <Tab> <Esc>
-inoremap <Tab> <Esc>
-vnoremap <Tab> <Esc>
-
 set nu
 set ignorecase
 set smartcase
