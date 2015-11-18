@@ -61,14 +61,20 @@ Plugin 'othree/html5.vim'
 Plugin 'tpope/vim-unimpaired'
 " Plugin 'groenewege/vim-less'
 Plugin 'orourkek/vim-less'
-Plugin 'scrooloose/syntastic'
 Plugin 'pangloss/vim-javascript'
 Plugin 'Glench/Vim-Jinja2-Syntax'
 Plugin 'blueyed/smarty.vim'
 Plugin 'nginx.vim'
 Plugin 'editorconfig/editorconfig-vim'
-Plugin 'jaxbot/syntastic-react'
 Plugin 'mxw/vim-jsx'
+
+if has('nvim')
+    Plugin 'benekastah/neomake'
+    autocmd! BufWritePost * Neomake
+else
+    Plugin 'scrooloose/syntastic'
+    Plugin 'jaxbot/syntastic-react'
+end
 
 call vundle#end()
 filetype plugin indent on
@@ -79,7 +85,7 @@ let g:user_emmet_expandabbr_key = '<C-Z>'
 let g:use_emmet_complete_tag = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:javascript_enable_domhtmlcss = 1
-let g:syntastic_javascript_checkers = ['eslint']
+" let g:syntastic_javascript_checkers = ['eslint']
 
 "### Remappings ###"
 
