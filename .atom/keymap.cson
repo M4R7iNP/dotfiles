@@ -1,0 +1,22 @@
+# Atom key bindings
+
+# Remap esc to tab
+'atom-text-editor.vim-mode':
+  'tab': 'vim-mode:reset-normal-mode'
+'atom-text-editor.vim-mode:not(.normal-mode)':
+  'tab': 'vim-mode:activate-normal-mode'
+
+'atom-text-editor:not([mini]).vim-mode.insert-mode':
+  'shift-tab': 'editor:indent'
+
+# Remap ctrl-l and ctrl-h to tab navigation
+'body':
+  'ctrl-h': 'pane:show-previous-item',
+  'ctrl-l': 'pane:show-next-item'
+'atom-workspace atom-text-editor':
+  'ctrl-h': 'pane:show-previous-item',
+  'ctrl-l': 'pane:show-next-item'
+
+# Fix shift-enter
+'atom-text-editor:not([mini]).vim-mode.insert-mode':
+  'shift-enter': 'editor:newline'
