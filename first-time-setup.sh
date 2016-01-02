@@ -6,6 +6,12 @@ do
     . "$f"
 done
 
+PUT_IN_BASHRC=". ~/dotfiles/.bashrc"
+if ! grep -q "$PUT_IN_BASHRC" ~/.bashrc;
+then
+    echo -e "\n$PUT_IN_BASHRC\n" >> ~/.bashrc
+fi
+
 # Packages to install
 PACKAGES=(
 vim
@@ -42,5 +48,6 @@ fi
 ln -sf ~/dotfiles/.vimrc ~
 ln -sf ~/dotfiles/.tmux.conf ~
 ln -sf ~/dotfiles/.inputrc ~
+ln -sf ~/dotfiles/.gitconfig
 
 vim +PluginInstall +qall

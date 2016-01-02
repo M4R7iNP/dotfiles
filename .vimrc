@@ -10,6 +10,8 @@ set incsearch
 set showmatch
 set bg=dark
 set title
+set mouse=c
+set nomousefocus
 
 " Remove unwanted files
 set nobackup
