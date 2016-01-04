@@ -73,6 +73,10 @@ Plugin 'mxw/vim-jsx'
 if has('nvim')
     Plugin 'benekastah/neomake'
     autocmd! BufWritePost * Neomake
+
+    " Use deoplete
+    Plugin 'Shougo/deoplete.nvim'
+    let g:deoplete#enable_at_startup = 1
 else
     Plugin 'scrooloose/syntastic'
     Plugin 'jaxbot/syntastic-react'

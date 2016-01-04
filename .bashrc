@@ -9,7 +9,12 @@ esac
 shopt -s histappend
 HISTCONTROL=ignoreboth
 
-export EDITOR=nvim
+if which nvim >/dev/null;
+then
+    export EDITOR=nvim
+else
+    export EDITOR=nvim
+fi
 
 # Aliases
 alias ls='ls --color=auto'
@@ -23,5 +28,13 @@ alias vim='vim -p'
 alias nvim='nvim -p'
 alias tmux='tmux -2'
 alias tmuxa='tmux a'
-alias e="$EDITOR"
+alias edit="$EDITOR"
+alias e=edit
 
+if [ "$EDITOR" = "nvim" ];
+then
+    alias vim=vim_to_nvim
+    vim_to_nvim() {
+        echo "NEI NEI NEI! Skriv «e $@»";
+    }
+fi
