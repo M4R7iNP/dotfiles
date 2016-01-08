@@ -22,7 +22,7 @@ cmap w!! %!sudo tee > /dev/null %
 
 " Fix captial O being tardy
 set noesckeys
-set timeoutlen=100
+set timeoutlen=1000
 set ttimeout
 set ttimeoutlen=0
 
@@ -33,7 +33,7 @@ autocmd BufWinLeave * call clearmatches()
 
 " Highlight newlines and tabs
 set list
-set listchars=tab:^\ ,nbsp:¶,eol:¬
+set listchars=tab:^\ ,nbsp:¶,eol:¬,extends:»,precedes:«
 " set listchars=nbsp:¶,eol:ᒣ
 
 " Spaces!
@@ -67,16 +67,22 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'Glench/Vim-Jinja2-Syntax'
 Plugin 'blueyed/smarty.vim'
 Plugin 'nginx.vim'
-Plugin 'editorconfig/editorconfig-vim'
 Plugin 'mxw/vim-jsx'
+Plugin 'kshenoy/vim-signature'
+
+if has('python')
+    Plugin 'editorconfig/editorconfig-vim'
+endif
 
 if has('nvim')
     Plugin 'benekastah/neomake'
     autocmd! BufWritePost * Neomake
 
-    " Use deoplete
-    Plugin 'Shougo/deoplete.nvim'
-    let g:deoplete#enable_at_startup = 1
+    if has('python3')
+        " Use deoplete
+        Plugin 'Shougo/deoplete.nvim'
+        let g:deoplete#enable_at_startup = 1
+    endif
 else
     Plugin 'scrooloose/syntastic'
     Plugin 'jaxbot/syntastic-react'
@@ -119,6 +125,16 @@ nnoremap <F5> :!php -l %<CR>
 " nnoremap <F6> :JSHint<CR>
 nnoremap <F7> mzgg=G`z<CR>
 
+" Leader mappings
+map <silent> <leader>gs :Gstatus<cr>
+map <leader>ge :Gedit<cr>
+map <silent><leader>gr :Gread<cr>
+map <silent><leader>gb :Gblame<cr>
+map <leader>wt <C-w><S-t>
+map <leader>t :spl<cr>:term<cr>
+map <leader>l :set list!<cr>
+map <leader>reload :source ~/.vimrc<cr>
+
 set matchtime=0
 
 autocmd BufWinEnter /etc/nginx/*.conf setfiletype nginx
@@ -126,6 +142,8 @@ autocmd BufWinEnter /etc/nginx/*.conf setfiletype nginx
 " Nvim's terminal w00t
 if has('nvim')
     tnoremap <Esc> <C-\><C-n>
+    tnoremap <Tab> <C-\><C-n>
+    tnoremap <S-Tab> <Tab>
     tnoremap <C-w>h <C-\><C-n><C-w>h
     tnoremap <C-w>l <C-\><C-n><C-w>l
     tnoremap <C-w>j <C-\><C-n><C-w>j
@@ -164,4 +182,6 @@ function! s:SetListChars(config)
         endif
     endif
 endfunction
-call editorconfig#AddNewHook(function('s:SetListChars'))
+if has('python')
+    call editorconfig#AddNewHook(function('s:SetListChars'))
+endif

@@ -9,7 +9,7 @@ esac
 shopt -s histappend
 HISTCONTROL=ignoreboth
 
-if which nvim >/dev/null;
+if which nvim >/dev/null 2>/dev/null;
 then
     export EDITOR=nvim
 else
