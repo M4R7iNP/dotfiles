@@ -69,6 +69,8 @@ Plugin 'blueyed/smarty.vim'
 Plugin 'nginx.vim'
 Plugin 'mxw/vim-jsx'
 Plugin 'kshenoy/vim-signature'
+Plugin 'terryma/vim-multiple-cursors'
+Plugin 'simeng/vim-imba'
 
 if has('python')
     Plugin 'editorconfig/editorconfig-vim'
