@@ -13,9 +13,14 @@ set title
 set mouse=c
 set nomousefocus
 
-" Remove unwanted files
-set nobackup
-set noswapfile
+if has('nvim')
+    set undofile
+    set backup
+else
+    " Remove unwanted files
+    set nobackup
+    set noswapfile
+end
 
 " Forgot to run vim as sudo?
 cmap w!! %!sudo tee > /dev/null %
