@@ -16,6 +16,7 @@ set nomousefocus
 if has('nvim')
     set undofile
     set backup
+    set backupdir=~/.local/share/nvim/backup
 else
     " Remove unwanted files
     set nobackup
@@ -105,6 +106,7 @@ let g:use_emmet_complete_tag = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:javascript_enable_domhtmlcss = 1
 " let g:syntastic_javascript_checkers = ['eslint']
+let g:multi_cursor_quit_key = '<Tab>'
 
 "### Remappings ###"
 
@@ -134,6 +136,7 @@ nnoremap <F7> mzgg=G`z<CR>
 
 " Leader mappings
 map <silent> <leader>gs :Gstatus<cr>
+map <silent> <leader>gd :Gdiff<cr>
 map <leader>ge :Gedit<cr>
 map <silent><leader>gr :Gread<cr>
 map <silent><leader>gb :Gblame<cr>
