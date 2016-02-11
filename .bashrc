@@ -9,12 +9,15 @@ esac
 shopt -s histappend
 HISTCONTROL=ignoreboth
 
-if which nvim >/dev/null 2>/dev/null;
+NVIM_LOCATION=which nvim >/dev/null 2>/dev/null
+if [ "$?" = "0" ];
 then
-    export EDITOR=nvim
+    EDITOR=nvim
 else
-    export EDITOR=nvim
+    EDITOR=vim
 fi
+
+export EDITOR="$EDITOR"
 
 # Aliases
 alias ls='ls --color=auto'
