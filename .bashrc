@@ -9,7 +9,7 @@ esac
 shopt -s histappend
 HISTCONTROL=ignoreboth
 
-NVIM_LOCATION=which nvim >/dev/null 2>/dev/null
+NVIM_LOCATION=$(which nvim >/dev/null 2>/dev/null)
 if [ "$?" = "0" ];
 then
     EDITOR=nvim
