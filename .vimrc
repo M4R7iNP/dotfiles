@@ -40,7 +40,8 @@ autocmd BufWinLeave * call clearmatches()
 " Highlight newlines and tabs
 set list
 set listchars=tab:^\ ,nbsp:¶,eol:¬,extends:»,precedes:«
-" set listchars=nbsp:¶,eol:ᒣ
+highlight NonText ctermfg=238
+highlight SpecialKey ctermfg=24
 
 " Spaces!
 set tabstop=4
@@ -118,6 +119,7 @@ imap <S-Right> <Right>
 " Switch tabs using Ctrl left/right
 nnoremap <C-L> gt<CR>
 nnoremap <C-H> gT<CR>
+nnoremap <bs> gT<CR>
 
 nnoremap Q <nop>
 nnoremap K <nop>
@@ -143,6 +145,7 @@ map <silent><leader>gb :Gblame<cr>
 map <leader>wt <C-w><S-t>
 map <leader>t :spl<cr>:term<cr>
 map <leader>l :set list!<cr>
+map <leader>v :tabe ~/.vimrc<cr>
 map <leader>reload :source ~/.vimrc<cr>
 
 set matchtime=0

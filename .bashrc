@@ -1,10 +1,7 @@
 # Martins .bashrc
 
 # If not running interactively, don't do anything
-case $- in
-    *i*) ;;
-      *) return;;
-esac
+[[ $- != *i* ]] && return
 
 shopt -s histappend
 HISTCONTROL=ignoreboth
