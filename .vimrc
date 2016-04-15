@@ -177,7 +177,9 @@ autocmd BufWritePost ~/static.tek.no/*.less silent !echo -ne '<afile>:p' | nc -U
 
 " Hwo 2 witre plz
 cnoreabbrev tbae tabe
+cnoreabbrev vps vsp
 inoreabbrev requrie require
+inoreabbrev esacpe escape
 
 " Nicer window scrolling
 set scrolloff=4
@@ -188,13 +190,15 @@ set sidescroll=1
 set formatoptions& formatoptions+=mM
 
 " Dont hightlight tabs in projects that use tabs as indentation
-function! s:SetListChars(config)
+function! g:SetListChars(config)
     if has_key(a:config, "indent_style")
         if a:config["indent_style"] == "tab"
             set listchars=tab:\ \ ,nbsp:¶,eol:¬
         endif
     endif
+
+    return 0
 endfunction
 if has('python')
-    call editorconfig#AddNewHook(function('s:SetListChars'))
+    call editorconfig#AddNewHook(function('g:SetListChars'))
 endif
