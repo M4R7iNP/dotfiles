@@ -17,6 +17,7 @@ if has('nvim')
     set undofile
     set backup
     set backupdir=~/.local/share/nvim/backup
+    set backupcopy=yes
 else
     " Remove unwanted files
     set nobackup
@@ -117,9 +118,11 @@ imap <S-Left> <Left>
 imap <S-Right> <Right>
 
 " Switch tabs using Ctrl left/right
-nnoremap <C-L> gt<CR>
-nnoremap <C-H> gT<CR>
-nnoremap <bs> gT<CR>
+nnoremap <C-L> gt
+nnoremap <C-H> gT
+if has('nvim')
+    nnoremap <bs> gT
+endif
 
 nnoremap Q <nop>
 nnoremap K <nop>
