@@ -79,6 +79,7 @@ Plugin 'mxw/vim-jsx'
 Plugin 'kshenoy/vim-signature'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'simeng/vim-imba'
+Plugin 'jakobwesthoff/argumentrewrap'
 
 if has('python')
     Plugin 'editorconfig/editorconfig-vim'
@@ -150,6 +151,8 @@ map <leader>t :spl<cr>:term<cr>
 map <leader>l :set list!<cr>
 map <leader>v :tabe ~/.vimrc<cr>
 map <leader>reload :source ~/.vimrc<cr>
+nnoremap <silent> <leader>s :call argumentrewrap#RewrapArguments()<CR>
+
 
 set matchtime=0
 
