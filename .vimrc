@@ -64,13 +64,12 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'L9'
 Plugin 'FuzzyFinder'
 Plugin 'bling/vim-airline'
-" Plugin 'Shutnik/jshint2.vim'
 Plugin 'mattn/emmet-vim'
 " Plugin 'Valloric/MatchTagAlways'
 Plugin 'othree/html5.vim'
 Plugin 'tpope/vim-unimpaired'
-" Plugin 'groenewege/vim-less'
 Plugin 'orourkek/vim-less'
+Plugin 'ap/vim-css-color'
 Plugin 'pangloss/vim-javascript'
 Plugin 'Glench/Vim-Jinja2-Syntax'
 Plugin 'blueyed/smarty.vim'
@@ -88,6 +87,8 @@ endif
 if has('nvim')
     Plugin 'benekastah/neomake'
     autocmd! BufWritePost * Neomake
+    let g:neomake_javascript_enabled_makers = ['eslint']
+    let g:neomake_jsx_enabled_makers = ['eslint']
 
     if has('python3')
         " Use deoplete
@@ -106,6 +107,30 @@ filetype plugin indent on
 let g:mta_filetypes = { 'html' : 1, 'xhtml' : 1, 'xml' : 1, 'jinja' : 1, 'smarty': 1 }
 let g:user_emmet_expandabbr_key = '<C-Z>'
 let g:use_emmet_complete_tag = 1
+
+let g:user_emmet_settings = {
+\  'html': {
+\    'expandos': {
+\      'table': 'table>(thead>tr>th)+(tbody>tr>td)'
+\    }
+\  },
+\  'xml': {
+\    'default_attributes' : {
+\      'option': [{'name': ''}],
+\      'rule': [{'match': ''}]
+\    }
+\  },
+\  'php': {
+\    'snippets': {
+\      'aethermodule': "class ${cursor} extends AetherModule {\n\tfunction run() {\n\t\t\\$tpl = \\$this->sl->getTemplate();\n\t\t\\$config = \\$this->sl->get(\"aetherConfig\");\n\t\t\\$this->options = \\$config->getOptions();\n\n\t}\r}",
+\      'phphead': "<?php\n\n"
+\    }
+\  }
+\}
+
+au BufNewFile *.php :Emmet phphead
+au BufNewFile modules/*.php :Emmet aethermodule
+
 let g:airline#extensions#tabline#enabled = 1
 let g:javascript_enable_domhtmlcss = 1
 " let g:syntastic_javascript_checkers = ['eslint']
@@ -208,3 +233,7 @@ endfunction
 if has('python')
     call editorconfig#AddNewHook(function('g:SetListChars'))
 endif
+
+" Improve go-to-definition and omnicompletion behavior
+nnoremap g] <C-w><C-]><C-w>T
+set completeopt=longest,menuone

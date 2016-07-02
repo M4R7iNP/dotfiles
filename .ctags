@@ -1,3 +1,9 @@
 --exclude=.git
+--exclude=thirdparty
+--exclude=3rdparty
 --exclude=node_modules
+--totals=yes
+--tag-relative=yes
 --links=no
+--fields=+aimlS
+--PHP-kinds=+cf
