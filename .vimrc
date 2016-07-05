@@ -125,6 +125,19 @@ let g:user_emmet_settings = {
 \      'aethermodule': "class ${cursor} extends AetherModule {\n\tfunction run() {\n\t\t\\$tpl = \\$this->sl->getTemplate();\n\t\t\\$config = \\$this->sl->get(\"aetherConfig\");\n\t\t\\$this->options = \\$config->getOptions();\n\n\t}\r}",
 \      'phphead': "<?php\n\n"
 \    }
+\  },
+\  'smarty': {
+\    'extends': 'html',
+\    'snippets': {
+\      'if': "{if |}\n{/if}",
+\      'else': "{else}\n|",
+\      'elseif': "{elseif |}",
+\      'block': "{block name=\"|\"}\n{/block}",
+\      'include': "{include '|'}",
+\      'extend': "{extend '|'}",
+\      'assign': "{assign |}",
+\      'foreach': "{foreach |}\n{/foreach}"
+\    }
 \  }
 \}
 
