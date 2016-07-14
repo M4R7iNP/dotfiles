@@ -79,6 +79,7 @@ Plugin 'kshenoy/vim-signature'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'simeng/vim-imba'
 Plugin 'jakobwesthoff/argumentrewrap'
+Plugin 'derekwyatt/vim-scala'
 
 if has('python')
     Plugin 'editorconfig/editorconfig-vim'

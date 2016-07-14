@@ -66,3 +66,5 @@ ln -sf ~/.vim ~/.config/nvim
 
 # Install vim plugins
 vim +PluginInstall +qall
+
+source ~/.bashrc

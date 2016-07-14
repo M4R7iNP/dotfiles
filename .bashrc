@@ -6,6 +6,8 @@
 shopt -s histappend
 HISTCONTROL=ignoreboth
 
+export PATH="~/.local/bin:$PATH"
+
 NVIM_LOCATION=$(which nvim >/dev/null 2>/dev/null)
 if [ "$?" = "0" ];
 then
@@ -28,13 +30,7 @@ alias vim='vim -p'
 alias nvim='nvim -p'
 alias tmux='tmux -2'
 alias tmuxa='tmux a'
+alias chperm='sudo chown martin:adm . -R && sudo chmod ug=rwX,o= . -R'
 alias edit="$EDITOR"
 alias e=edit
-
-if [ "$EDITOR" = "nvim" ];
-then
-    alias vim=vim_to_nvim
-    vim_to_nvim() {
-        echo "NEI NEI NEI! Skriv «e $@»";
-    }
-fi
+alias sudo='sudo '
