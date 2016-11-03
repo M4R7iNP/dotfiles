@@ -124,7 +124,7 @@ let g:user_emmet_settings = {
 \  },
 \  'php': {
 \    'snippets': {
-\      'aethermodule': "class ${cursor} extends AetherModule {\n\tfunction run() {\n\t\t\\$tpl = \\$this->sl->getTemplate();\n\t\t\\$config = \\$this->sl->get(\"aetherConfig\");\n\t\t\\$this->options = \\$config->getOptions();\n\n\t}\r}",
+\      'aethermodule': "class ${cursor} extends AetherModule {\n\tfunction run() {\n\t\t\\$tpl = \\$this->sl->getTemplate();\n\t\t\\$config = \\$this->sl->get(\"aetherConfig\");\n\n\t}\r}",
 \      'phphead': "<?php\n\n"
 \    }
 \  },
@@ -136,7 +136,7 @@ let g:user_emmet_settings = {
 \      'elseif': "{elseif |}",
 \      'block': "{block name=\"|\"}\n{/block}",
 \      'include': "{include '|'}",
-\      'extend': "{extend '|'}",
+\      'extends': "{extends '|'}",
 \      'assign': "{assign |}",
 \      'foreach': "{foreach |}\n{/foreach}"
 \    }
@@ -145,6 +145,8 @@ let g:user_emmet_settings = {
 
 au BufNewFile *.php :Emmet phphead
 au BufNewFile modules/*.php :Emmet aethermodule
+au Filetype xml setlocal makeprg=generateConfig\ %
+
 
 let g:airline#extensions#tabline#enabled = 1
 let g:javascript_enable_domhtmlcss = 1
@@ -161,12 +163,11 @@ imap <S-Right> <Right>
 " Switch tabs using Ctrl left/right
 nnoremap <C-L> gt
 nnoremap <C-H> gT
-if has('nvim')
-    nnoremap <bs> gT
-endif
 
+" Disable annoying letters
 nnoremap Q <nop>
 nnoremap K <nop>
+vnoremap K <nop>
 nnoremap ; :
 
 " Remap Esc to Tab
@@ -189,10 +190,13 @@ map <silent><leader>gb :Gblame<cr>
 map <leader>wt <C-w><S-t>
 map <leader>t :spl<cr>:term<cr>
 map <leader>l :set list!<cr>
-map <leader>v :tabe ~/.vimrc<cr>
+" map <leader>v :tabe ~/.vimrc<cr>
 map <leader>reload :source ~/.vimrc<cr>
 nnoremap <silent> <leader>s :call argumentrewrap#RewrapArguments()<CR>
-
+map <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
+map <leader>t :tabe <C-R>=expand("%:p:h") . "/" <CR>
+map <leader>s :split <C-R>=expand("%:p:h") . "/" <CR>
+map <leader>v :vsp <C-R>=expand("%:p:h") . "/" <CR>
 
 set matchtime=0
 
@@ -217,9 +221,6 @@ set wildmenu
 
 " For tmux
 set lazyredraw
-
-" Lews
-autocmd BufWritePost ~/static.tek.no/*.less silent !echo -ne '<afile>:p' | nc -U ~/static.tek.no/lews.sock
 
 " Hwo 2 witre plz
 cnoreabbrev tbae tabe
