@@ -57,7 +57,7 @@ fi
 ln -sf ~/dotfiles/.vimrc ~
 ln -sf ~/dotfiles/.tmux.conf ~
 ln -sf ~/dotfiles/.inputrc ~
-ln -sf ~/dotfiles/.gitconfig ~
+ln -sf ~/dotfiles/.git{config,ignore_global} ~
 ln -sf ~/dotfiles/.vimrc ~/.vim/init.vim
 
 # Create folders for nvim

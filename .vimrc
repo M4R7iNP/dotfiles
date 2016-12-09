@@ -192,7 +192,7 @@ map <leader>t :spl<cr>:term<cr>
 map <leader>l :set list!<cr>
 " map <leader>v :tabe ~/.vimrc<cr>
 map <leader>reload :source ~/.vimrc<cr>
-nnoremap <silent> <leader>s :call argumentrewrap#RewrapArguments()<CR>
+nnoremap <silent> <leader>A :call argumentrewrap#RewrapArguments()<CR>
 map <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 map <leader>t :tabe <C-R>=expand("%:p:h") . "/" <CR>
 map <leader>s :split <C-R>=expand("%:p:h") . "/" <CR>
@@ -201,6 +201,8 @@ map <leader>v :vsp <C-R>=expand("%:p:h") . "/" <CR>
 set matchtime=0
 
 autocmd BufWinEnter /etc/nginx/*.conf setfiletype nginx
+autocmd BufWinEnter ~/nginx-config/sites-*/* setfiletype nginx
+autocmd BufWinEnter /etc/varnish/*.vcl setfiletype conf
 
 " Nvim's terminal w00t
 if has('nvim')
