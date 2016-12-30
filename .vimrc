@@ -12,6 +12,7 @@ set bg=dark
 set title
 set mouse=c
 set nomousefocus
+set conceallevel=2
 
 if has('nvim')
     set undofile
@@ -32,11 +33,6 @@ set noesckeys
 set timeoutlen=1000
 set ttimeout
 set ttimeoutlen=0
-
-" Highlight unwanted spaces
-highlight ExtraWhitespace ctermbg=red guibg=red
-autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
-autocmd BufWinLeave * call clearmatches()
 
 " Highlight newlines and tabs
 set list
@@ -73,7 +69,9 @@ Plugin 'ap/vim-css-color'
 Plugin 'pangloss/vim-javascript'
 Plugin 'vim-ruby/vim-ruby'
 Plugin 'Glench/Vim-Jinja2-Syntax'
-Plugin 'blueyed/smarty.vim'
+Plugin 'M4R7iNP/smarty.vim'
+Plugin 'M4R7iNP/vim-inky'
+Plugin 'slim-template/vim-slim'
 Plugin 'M4R7iNP/vim-nginx'
 Plugin 'mxw/vim-jsx'
 Plugin 'kshenoy/vim-signature'
@@ -81,6 +79,12 @@ Plugin 'terryma/vim-multiple-cursors'
 Plugin 'simeng/vim-imba'
 Plugin 'jakobwesthoff/argumentrewrap'
 Plugin 'derekwyatt/vim-scala'
+Plugin 'godlygeek/tabular'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'ntpeters/vim-better-whitespace'
+Plugin 'majutsushi/tagbar'
+Plugin 'benmills/vimux'
+Plugin 'Shougo/neco-vim'
 
 if has('python')
     Plugin 'editorconfig/editorconfig-vim'
@@ -96,6 +100,10 @@ if has('nvim')
         " Use deoplete
         Plugin 'Shougo/deoplete.nvim'
         let g:deoplete#enable_at_startup = 1
+        let g:deoplete#tag#cache_limit_size = 5000000
+        let g:deoplete#omni_patterns = {
+            \ 'php': '\w+|[^. \t]->\w*|\w+::\w*'
+        \ }
     endif
 else
     Plugin 'scrooloose/syntastic'
@@ -105,10 +113,14 @@ end
 call vundle#end()
 filetype plugin indent on
 
-" let jshint2_read = 1
 let g:mta_filetypes = { 'html' : 1, 'xhtml' : 1, 'xml' : 1, 'jinja' : 1, 'smarty': 1 }
 let g:user_emmet_expandabbr_key = '<C-Z>'
 let g:use_emmet_complete_tag = 1
+let g:smarty_conceal_translated_strings = 1
+
+let g:airline#extensions#tabline#enabled = 1
+let g:javascript_enable_domhtmlcss = 1
+let g:multi_cursor_quit_key = '<Tab>'
 
 let g:user_emmet_settings = {
 \  'html': {
@@ -147,11 +159,6 @@ au BufNewFile *.php :Emmet phphead
 au BufNewFile modules/*.php :Emmet aethermodule
 au Filetype xml setlocal makeprg=generateConfig\ %
 
-
-let g:airline#extensions#tabline#enabled = 1
-let g:javascript_enable_domhtmlcss = 1
-" let g:syntastic_javascript_checkers = ['eslint']
-let g:multi_cursor_quit_key = '<Tab>'
 
 "### Remappings ###"
 

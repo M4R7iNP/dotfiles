@@ -6,7 +6,7 @@
 shopt -s histappend
 HISTCONTROL=ignoreboth
 
-export PATH="~/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 
 NVIM_LOCATION=$(which nvim >/dev/null 2>/dev/null)
 if [ "$?" = "0" ];
