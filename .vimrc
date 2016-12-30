@@ -6,13 +6,16 @@ set nu
 set nowrap
 set ignorecase
 set smartcase
+set smarttab
 set incsearch
 set showmatch
+set matchtime=0
 set bg=dark
 set title
 set mouse=c
 set nomousefocus
 set conceallevel=2
+set viminfo=!,'20,<50,s10,h
 
 if has('nvim')
     set undofile
@@ -28,7 +31,13 @@ end
 " Forgot to run vim as sudo?
 cmap w!! %!sudo tee > /dev/null %
 
-" Fix captial O being tardy
+if !empty($SUDO_USER) && $USER !=# $SUDO_USER
+    set viminfo=
+    set directory=
+    set backupdir=
+endif
+
+" Fix capital O being tardy
 set noesckeys
 set timeoutlen=1000
 set ttimeout
@@ -113,11 +122,11 @@ end
 call vundle#end()
 filetype plugin indent on
 
+" plugin options
 let g:mta_filetypes = { 'html' : 1, 'xhtml' : 1, 'xml' : 1, 'jinja' : 1, 'smarty': 1 }
 let g:user_emmet_expandabbr_key = '<C-Z>'
 let g:use_emmet_complete_tag = 1
 let g:smarty_conceal_translated_strings = 1
-
 let g:airline#extensions#tabline#enabled = 1
 let g:javascript_enable_domhtmlcss = 1
 let g:multi_cursor_quit_key = '<Tab>'
@@ -159,6 +168,11 @@ au BufNewFile *.php :Emmet phphead
 au BufNewFile modules/*.php :Emmet aethermodule
 au Filetype xml setlocal makeprg=generateConfig\ %
 
+" Spell
+set spelllang=en,nb
+set spellcapcheck=
+hi SpellBad ctermbg=52
+let g:spellfile_URL = 'http://ftp.vim.org/vim/runtime/spell'
 
 "### Remappings ###"
 
@@ -184,9 +198,6 @@ vnoremap <Tab> <Esc>
 
 nnoremap <F3> :set hls!<CR>
 nnoremap <F4> :set nu!<CR>:set list!<CR>
-nnoremap <F5> :!php -l %<CR>
-" nnoremap <F6> :JSHint<CR>
-nnoremap <F7> mzgg=G`z<CR>
 
 " Leader mappings
 map <silent> <leader>gs :Gstatus<cr>
@@ -205,11 +216,10 @@ map <leader>t :tabe <C-R>=expand("%:p:h") . "/" <CR>
 map <leader>s :split <C-R>=expand("%:p:h") . "/" <CR>
 map <leader>v :vsp <C-R>=expand("%:p:h") . "/" <CR>
 
-set matchtime=0
-
 autocmd BufWinEnter /etc/nginx/*.conf setfiletype nginx
 autocmd BufWinEnter ~/nginx-config/sites-*/* setfiletype nginx
 autocmd BufWinEnter /etc/varnish/*.vcl setfiletype conf
+autocmd FileType gitcommit,html,smarty setlocal spell
 
 " Nvim's terminal w00t
 if has('nvim')
@@ -221,7 +231,7 @@ if has('nvim')
     tnoremap <C-w>j <C-\><C-n><C-w>j
     tnoremap <C-w>k <C-\><C-n><C-w>k
 
-    autocmd TermOpen * set nolist
+    autocmd TermOpen * setlocal nolist
 endif
 
 " Improved tab completion (:tabe awd<tab>)
@@ -236,6 +246,7 @@ cnoreabbrev tbae tabe
 cnoreabbrev vps vsp
 inoreabbrev requrie require
 inoreabbrev esacpe escape
+digraph ./ 8230
 
 " Nicer window scrolling
 set scrolloff=4
@@ -245,20 +256,26 @@ set sidescroll=1
 " I dont recall what this does
 set formatoptions& formatoptions+=mM
 
-" Dont hightlight tabs in projects that use tabs as indentation
-function! g:SetListChars(config)
-    if has_key(a:config, "indent_style")
-        if a:config["indent_style"] == "tab"
-            set listchars=tab:\ \ ,nbsp:¶,eol:¬
+" Don't highlight tabs in projects that use tabs as indentation
+if exists("g:loaded_EditorConfig")
+    function g:SetListChars(config)
+        if has_key(a:config, "indent_style")
+            if a:config["indent_style"] == "tab"
+                set listchars=tab:\ \ ,nbsp:¶,eol:¬
+            endif
         endif
-    endif
 
-    return 0
-endfunction
-if has('python')
+        return 0
+    endfunction
+
     call editorconfig#AddNewHook(function('g:SetListChars'))
 endif
 
 " Improve go-to-definition and omnicompletion behavior
 nnoremap g] <C-w><C-]><C-w>T
 set completeopt=longest,menuone
+
+" I have local .vimrc in ~/.local/.vimrc
+if filereadable(expand("$HOME") . "/.local/.vimrc")
+    source $HOME/.local/.vimrc
+endif
