@@ -1,0 +1,4 @@
+\timing
+\set HISTSIZE 10000
+\set null '[NULL]'
+\set HISTFILE ~/.psql_history- :DBNAME
