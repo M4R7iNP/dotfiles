@@ -4,6 +4,6 @@
 [push]
 	default = simple
 [core]
-	excludesfile = ~/.gitignore_global
+	excludesfile = ~/dotfiles/.gitignore_global
 [pull]
 	rebase = true

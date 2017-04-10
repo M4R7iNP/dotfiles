@@ -34,3 +34,5 @@ alias chperm='sudo chown martin:adm . -R && sudo chmod ug=rwX,o= . -R'
 alias edit="$EDITOR"
 alias e=edit
 alias sudo='sudo '
+alias ..='cd ..'
+alias ....='cd ../..'

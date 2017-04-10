@@ -20,7 +20,8 @@ set viminfo=!,'20,<50,s10,h
 if has('nvim')
     set undofile
     set backup
-    set backupdir=~/.local/share/nvim/backup
+    set backupdir=~/.local/share/nvim/backup//
+    set directory=~/.local/share/nvim/swap//
     set backupcopy=yes
 else
     " Remove unwanted files
@@ -165,7 +166,7 @@ let g:user_emmet_settings = {
 \}
 
 au BufNewFile *.php :Emmet phphead
-au BufNewFile modules/*.php :Emmet aethermodule
+au BufNewFile lib/modules/*.php :Emmet aethermodule
 au Filetype xml setlocal makeprg=generateConfig\ %
 
 " Spell
@@ -219,7 +220,7 @@ map <leader>v :vsp <C-R>=expand("%:p:h") . "/" <CR>
 autocmd BufWinEnter /etc/nginx/*.conf setfiletype nginx
 autocmd BufWinEnter ~/nginx-config/sites-*/* setfiletype nginx
 autocmd BufWinEnter /etc/varnish/*.vcl setfiletype conf
-autocmd FileType gitcommit,html,smarty setlocal spell
+autocmd FileType gitcommit,html,smarty,eruby,slim,po setlocal spell
 
 " Nvim's terminal w00t
 if has('nvim')
