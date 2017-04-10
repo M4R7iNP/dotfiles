@@ -6,7 +6,6 @@ set nu
 set nowrap
 set ignorecase
 set smartcase
-set smarttab
 set incsearch
 set showmatch
 set matchtime=0
@@ -34,8 +33,8 @@ cmap w!! %!sudo tee > /dev/null %
 
 if !empty($SUDO_USER) && $USER !=# $SUDO_USER
     set viminfo=
-    set directory=
-    set backupdir=
+    set directory=/tmp//
+    set backupdir=/tmp//
 endif
 
 " Fix capital O being tardy
@@ -54,6 +53,7 @@ highlight SpecialKey ctermfg=24
 set tabstop=4
 set shiftwidth=4
 set expandtab
+set smarttab
 
 " Plugin specific settings
 set nocompatible
@@ -221,6 +221,7 @@ autocmd BufWinEnter /etc/nginx/*.conf setfiletype nginx
 autocmd BufWinEnter ~/nginx-config/sites-*/* setfiletype nginx
 autocmd BufWinEnter /etc/varnish/*.vcl setfiletype conf
 autocmd FileType gitcommit,html,smarty,eruby,slim,po setlocal spell
+autocmd BufWinEnter /etc/cron.d/* set noexpandtab
 
 " Nvim's terminal w00t
 if has('nvim')
