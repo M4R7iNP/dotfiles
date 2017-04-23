@@ -95,6 +95,8 @@ Plugin 'ntpeters/vim-better-whitespace'
 Plugin 'majutsushi/tagbar'
 Plugin 'benmills/vimux'
 Plugin 'Shougo/neco-vim'
+Plugin 'digitaltoad/vim-pug'
+Plugin 'sbdchd/neoformat'
 
 if has('python')
     Plugin 'editorconfig/editorconfig-vim'
@@ -212,16 +214,18 @@ map <leader>l :set list!<cr>
 " map <leader>v :tabe ~/.vimrc<cr>
 map <leader>reload :source ~/.vimrc<cr>
 nnoremap <silent> <leader>A :call argumentrewrap#RewrapArguments()<CR>
-map <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
-map <leader>t :tabe <C-R>=expand("%:p:h") . "/" <CR>
-map <leader>s :split <C-R>=expand("%:p:h") . "/" <CR>
-map <leader>v :vsp <C-R>=expand("%:p:h") . "/" <CR>
+map <leader>e :e <C-R>=expand("%:h") . "/" <CR>
+map <leader>t :tabe <C-R>=expand("%:h") . "/" <CR>
+map <leader>s :split <C-R>=expand("%:h") . "/" <CR>
+map <leader>v :vsp <C-R>=expand("%:h") . "/" <CR>
+noremap <leader>f :Neoformat<CR>
 
 autocmd BufWinEnter /etc/nginx/*.conf setfiletype nginx
 autocmd BufWinEnter ~/nginx-config/sites-*/* setfiletype nginx
 autocmd BufWinEnter /etc/varnish/*.vcl setfiletype conf
 autocmd FileType gitcommit,html,smarty,eruby,slim,po setlocal spell
 autocmd BufWinEnter /etc/cron.d/* set noexpandtab
+autocmd BufWinEnter .eslintrc set ft=json
 
 " Nvim's terminal w00t
 if has('nvim')
