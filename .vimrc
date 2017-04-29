@@ -97,6 +97,7 @@ Plugin 'benmills/vimux'
 Plugin 'Shougo/neco-vim'
 Plugin 'digitaltoad/vim-pug'
 Plugin 'sbdchd/neoformat'
+Plugin 'jparise/vim-graphql'
 
 if has('python')
     Plugin 'editorconfig/editorconfig-vim'
@@ -164,12 +165,41 @@ let g:user_emmet_settings = {
 \      'assign': "{assign |}",
 \      'foreach': "{foreach |}\n{/foreach}"
 \    }
+\  },
+\  'javascript.jsx': {
+\     'extends': 'jsx'
 \  }
 \}
 
 au BufNewFile *.php :Emmet phphead
 au BufNewFile lib/modules/*.php :Emmet aethermodule
 au Filetype xml setlocal makeprg=generateConfig\ %
+
+function! EnableGraphqlSyntaxHighlighting()
+    if exists('b:current_syntax')
+        unlet b:current_syntax
+    endif
+
+    syn include @javascriptGraphql syntax/graphql.vim
+
+    if exists('s:current_syntax')
+        let b:current_syntax=s:current_syntax
+    else
+        unlet b:current_syntax
+    endif
+
+    " syn region graphql start=+Relay.QL`+ skip=+\\\(`\|$\)+ end=+`+ keepend contains=@javascriptGraphql
+    " syntax cluster jsExpression add=graphql
+
+    syn region jsGraphql start=+`+ skip=+\\\(`\|$\)+ end=+`+ contains=jsTemplateExpression,@javascriptGraphql
+    syn match jsGraphqlStart contained /Relay\.QL\%(`\)\@=/ nextgroup=jsGraphql
+    syntax cluster jsExpression add=jsGraphqlStart
+
+    " hi link jsGraphql String
+    hi link jsGraphqlStart StorageClass
+endfunction
+
+au Filetype javascript.jsx call EnableGraphqlSyntaxHighlighting()
 
 " Spell
 set spelllang=en,nb
