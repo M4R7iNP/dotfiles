@@ -48,6 +48,7 @@ set list
 set listchars=tab:^\ ,nbsp:¶,eol:¬,extends:»,precedes:«
 highlight NonText ctermfg=238
 highlight SpecialKey ctermfg=24
+highlight NeomakeWarningDefault ctermfg=232 ctermbg=214 guifg=#000000 guibg=#ffaf00
 
 " Spaces!
 set tabstop=4
@@ -188,11 +189,8 @@ function! EnableGraphqlSyntaxHighlighting()
         unlet b:current_syntax
     endif
 
-    " syn region graphql start=+Relay.QL`+ skip=+\\\(`\|$\)+ end=+`+ keepend contains=@javascriptGraphql
-    " syntax cluster jsExpression add=graphql
-
     syn region jsGraphql start=+`+ skip=+\\\(`\|$\)+ end=+`+ contains=jsTemplateExpression,@javascriptGraphql
-    syn match jsGraphqlStart contained /Relay\.QL\%(`\)\@=/ nextgroup=jsGraphql
+    syn match jsGraphqlStart contained /\(Relay\.QL\|graphql\|gql\)\%(`\)\@=/ nextgroup=jsGraphql
     syntax cluster jsExpression add=jsGraphqlStart
 
     " hi link jsGraphql String
