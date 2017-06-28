@@ -189,9 +189,9 @@ function! EnableGraphqlSyntaxHighlighting()
         unlet b:current_syntax
     endif
 
-    syn region jsGraphql start=+`+ skip=+\\\(`\|$\)+ end=+`+ contains=jsTemplateExpression,@javascriptGraphql
+    syn region jsGraphql start=+`+ skip=+\\\(`\|$\)+ end=+`+ keepend contains=jsTemplateExpression,@javascriptGraphql
     syn match jsGraphqlStart contained /\(Relay\.QL\|graphql\|gql\)\%(`\)\@=/ nextgroup=jsGraphql
-    syntax cluster jsExpression add=jsGraphqlStart
+    syn cluster jsExpression add=jsGraphqlStart
 
     " hi link jsGraphql String
     hi link jsGraphqlStart StorageClass
