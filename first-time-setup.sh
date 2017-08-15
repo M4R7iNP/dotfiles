@@ -17,6 +17,8 @@ PACKAGES=(
 vim
 curl
 tmux
+automake
+build-essential
 )
 
 # Prompt to install packages
@@ -85,6 +87,26 @@ then
     echo "Installing ${NPM_PACKAGES[@]}"
 
     $NPM install -g ${NPM_PACKAGES[@]}
+fi
+
+# Prompt to install ctags
+read -p "Do you want ctags (universal ctags)? [N|y] " -n 1 -r
+echo
+
+if [[ "$REPLY" =~ ^[Yy]$ ]] # if yes
+then
+
+    pushd ~/dotfiles
+
+    git clone https://github.com/universal-ctags/ctags.git ctags
+    cd ctags
+
+    ./autogen.sh
+    ./configure --prefix=$HOME/.local
+    make -j2
+    make install
+
+    popd
 fi
 
 source ~/.bashrc

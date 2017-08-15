@@ -38,7 +38,9 @@ if !empty($SUDO_USER) && $USER !=# $SUDO_USER
 endif
 
 " Fix capital O being tardy
-set noesckeys
+if !has('nvim-0.2')
+    set noesckeys
+end
 set timeoutlen=1000
 set ttimeout
 set ttimeoutlen=0
@@ -99,6 +101,7 @@ Plugin 'Shougo/neco-vim'
 Plugin 'digitaltoad/vim-pug'
 Plugin 'sbdchd/neoformat'
 Plugin 'jparise/vim-graphql'
+Plugin 'ctrlpvim/ctrlp.vim'
 
 if has('python')
     Plugin 'editorconfig/editorconfig-vim'
@@ -118,6 +121,8 @@ if has('nvim')
         let g:deoplete#omni_patterns = {
             \ 'php': '\w+|[^. \t]->\w*|\w+::\w*'
         \ }
+
+        Plugin 'Shougo/denite.nvim'
     endif
 else
     Plugin 'scrooloose/syntastic'
@@ -189,7 +194,8 @@ function! EnableGraphqlSyntaxHighlighting()
         unlet b:current_syntax
     endif
 
-    syn region jsGraphql start=+`+ skip=+\\\(`\|$\)+ end=+`+ keepend contains=jsTemplateExpression,@javascriptGraphql
+    syn region jsGraphql start=+`+ skip=+\\\(`\|$\)+ end=+`+ keepend contains=jsTemplateExpressionGraphql,@javascriptGraphql
+    syn region jsTemplateExpressionGraphql contained containedin=@javascriptGraphql matchgroup=jsTemplateBraces start=+${+ end=+}+ contains=@jsExpression keepend
     syn match jsGraphqlStart contained /\(Relay\.QL\|graphql\|gql\)\%(`\)\@=/ nextgroup=jsGraphql
     syn cluster jsExpression add=jsGraphqlStart
 
