@@ -70,13 +70,14 @@ call vundle#begin()
 " Vundle plugins
 Plugin 'gmarik/Vundle.vim'
 Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-unimpaired'
+Plugin 'tpope/vim-speeddating'
 Plugin 'L9'
 Plugin 'FuzzyFinder'
 Plugin 'bling/vim-airline'
 Plugin 'mattn/emmet-vim'
 " Plugin 'Valloric/MatchTagAlways'
 Plugin 'othree/html5.vim'
-Plugin 'tpope/vim-unimpaired'
 Plugin 'orourkek/vim-less'
 Plugin 'ap/vim-css-color'
 Plugin 'pangloss/vim-javascript'
@@ -84,8 +85,8 @@ Plugin 'vim-ruby/vim-ruby'
 Plugin 'Glench/Vim-Jinja2-Syntax'
 Plugin 'M4R7iNP/smarty.vim'
 Plugin 'M4R7iNP/vim-inky'
-Plugin 'slim-template/vim-slim'
 Plugin 'M4R7iNP/vim-nginx'
+Plugin 'slim-template/vim-slim'
 Plugin 'mxw/vim-jsx'
 Plugin 'kshenoy/vim-signature'
 Plugin 'terryma/vim-multiple-cursors'
@@ -234,7 +235,7 @@ inoremap <Tab> <Esc>
 vnoremap <Tab> <Esc>
 
 nnoremap <F3> :set hls!<CR>
-nnoremap <F4> :set nu!<CR>:set list!<CR>
+nnoremap <F4> :set nu!<CR>:set list!<CR>:GitGutterToggle<CR>
 
 " Leader mappings
 map <silent> <leader>gs :Gstatus<cr>
