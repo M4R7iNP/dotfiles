@@ -19,6 +19,7 @@ curl
 tmux
 automake
 build-essential
+terminator
 )
 
 # Prompt to install packages
@@ -64,8 +65,13 @@ ln -sf ~/dotfiles/.git{config,ignore_global} ~
 ln -sf ~/dotfiles/.vimrc ~/.vim/init.vim
 
 # Create folders for nvim
-mkdir -p ~/.config ~/.local/share/nvim/backup
+mkdir -p \
+    ~/.config \
+    ~/.local/share/nvim/backup \
+    ~/.config/terminator
+
 ln -sf ~/.vim ~/.config/nvim
+ln -sf ~/dotfiles/terminator.config ~/.config/terminator/config
 
 # Install vim plugins
 vim +PluginInstall +qall
