@@ -206,6 +206,26 @@ endfunction
 
 au Filetype javascript.jsx call EnableGraphqlSyntaxHighlighting()
 
+function! EnableSqlSyntaxHighlighting()
+    if exists('b:current_syntax')
+        unlet b:current_syntax
+    endif
+
+    syn include @SQL syntax/sql.vim
+    syn sync clear
+    syn cluster SQL remove=sqlString,sqlComment
+
+    if exists('s:current_syntax')
+        let b:current_syntax=s:current_syntax
+    else
+        unlet b:current_syntax
+    endif
+
+    syn region SQLEmbedded start=+\z(['"`]\)\zs\_s*\v(ALTER|CALL|COMMENT|COMMIT|CONNECT|CREATE|DELETE|DROP|EXPLAIN|EXPORT|GRANT|IMPORT|INSERT|LOAD|LOCK|MERGE|REFRESH|RENAME|REPLACE|REVOKE|ROLLBACK|SELECT|WITH|SET|TRUNCATE|UNLOAD|UNSET|UPDATE|UPSERT)+ skip=+\\\z1+ end=+\ze\z1+ contains=@SQL containedin=jsTemplateString keepend extend
+endfunction
+
+au Filetype javascript call EnableSqlSyntaxHighlighting()
+
 " Spell
 set spelllang=en,nb
 set spellcapcheck=
