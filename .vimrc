@@ -157,7 +157,7 @@ let g:user_emmet_settings = {
 \  'php': {
 \    'snippets': {
 \      'aethermodule': "class ${cursor} extends AetherModule {\n\tfunction run() {\n\t\t\\$tpl = \\$this->sl->getTemplate();\n\t\t\\$config = \\$this->sl->get(\"aetherConfig\");\n\n\t}\r}",
-\      'phphead': "<?php\n\n"
+\      'phphead': "<?php\n"
 \    }
 \  },
 \  'smarty': {
