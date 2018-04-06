@@ -15,12 +15,20 @@ set mouse=c
 set nomousefocus
 set conceallevel=2
 set viminfo=!,'20,<50,s10,h
+set noshowmode
+set autoindent
+set copyindent
+set splitbelow
+set splitright
+set undolevels=1000
+set undoreload=10000
 
 if has('nvim')
     set undofile
     set backup
     set backupdir=~/.local/share/nvim/backup//
     set directory=~/.local/share/nvim/swap//
+    set undodir=~/.local/share/nvim/undo//
     set backupcopy=yes
 else
     " Remove unwanted files
