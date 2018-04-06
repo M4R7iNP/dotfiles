@@ -271,6 +271,7 @@ map <silent> <leader>gd :Gdiff<cr>
 map <leader>ge :Gedit<cr>
 map <silent><leader>gr :Gread<cr>
 map <silent><leader>gb :Gblame<cr>
+map <silent><leader>gw :Gbrowse!<cr>
 map <leader>wt <C-w><S-t>
 map <leader>t :spl<cr>:term<cr>
 map <leader>l :set list!<cr>
