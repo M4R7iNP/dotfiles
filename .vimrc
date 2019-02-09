@@ -84,43 +84,51 @@ Plugin 'L9'
 Plugin 'FuzzyFinder'
 Plugin 'bling/vim-airline'
 Plugin 'mattn/emmet-vim'
-" Plugin 'Valloric/MatchTagAlways'
-Plugin 'othree/html5.vim'
-Plugin 'orourkek/vim-less'
 Plugin 'ap/vim-css-color'
-Plugin 'pangloss/vim-javascript'
 Plugin 'vim-ruby/vim-ruby'
-Plugin 'Glench/Vim-Jinja2-Syntax'
-Plugin 'M4R7iNP/smarty.vim'
-Plugin 'M4R7iNP/vim-inky'
-Plugin 'M4R7iNP/vim-nginx'
-Plugin 'slim-template/vim-slim'
-Plugin 'mxw/vim-jsx'
 Plugin 'kshenoy/vim-signature'
 Plugin 'terryma/vim-multiple-cursors'
-Plugin 'simeng/vim-imba'
 Plugin 'jakobwesthoff/argumentrewrap'
-Plugin 'derekwyatt/vim-scala'
 Plugin 'godlygeek/tabular'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'ntpeters/vim-better-whitespace'
 Plugin 'majutsushi/tagbar'
 Plugin 'benmills/vimux'
-Plugin 'Shougo/neco-vim'
+Plugin 'sbdchd/neoformat' " runs e.g. prettier
+Plugin 'ctrlpvim/ctrlp.vim' " ctrlp search
+Plugin 'w0rp/ale' " lint
+
+" language specific plugins
+Plugin 'othree/html5.vim'
+Plugin 'orourkek/vim-less'
+Plugin 'pangloss/vim-javascript'
+Plugin 'mxw/vim-jsx'
+" Plugin 'leafgarland/typescript-vim'
+Plugin 'M4R7iNP/yats.vim'
+Plugin 'mhartington/nvim-typescript'
+Plugin 'simeng/vim-imba'
+Plugin 'M4R7iNP/smarty.vim'
+Plugin 'M4R7iNP/vim-inky'
+Plugin 'M4R7iNP/vim-nginx'
+Plugin 'Glench/Vim-Jinja2-Syntax'
 Plugin 'digitaltoad/vim-pug'
-Plugin 'sbdchd/neoformat'
+Plugin 'Shougo/neco-vim'
 Plugin 'jparise/vim-graphql'
-Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'derekwyatt/vim-scala'
+Plugin 'slim-template/vim-slim'
+Plugin 'wokalski/autocomplete-flow'
+Plugin 'fgsch/vim-varnish'
+Plugin 'ludovicchabant/vim-gutentags'
 
 if has('python')
     Plugin 'editorconfig/editorconfig-vim'
 endif
 
 if has('nvim')
-    Plugin 'benekastah/neomake'
-    autocmd! BufWritePost * Neomake
-    let g:neomake_javascript_enabled_makers = ['eslint']
-    let g:neomake_jsx_enabled_makers = ['eslint']
+    " Plugin 'benekastah/neomake'
+    " autocmd! BufWritePost * Neomake
+    " let g:neomake_javascript_enabled_makers = ['eslint']
+    " let g:neomake_jsx_enabled_makers = ['eslint']
 
     if has('python3')
         " Use deoplete
@@ -148,7 +156,14 @@ let g:use_emmet_complete_tag = 1
 let g:smarty_conceal_translated_strings = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:javascript_enable_domhtmlcss = 1
+let g:javascript_plugin_flow = 1
 let g:multi_cursor_quit_key = '<Tab>'
+let g:neoformat_try_formatprg = 1
+let g:neoformat_enabled_scss = ['prettier']
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+let g:ale_linters_ignore = {'typescript': ['tslint', 'tsserver'], 'javascript': ['tslint', 'tsserver']}
+let g:yats_host_keyword = 0
 
 let g:user_emmet_settings = {
 \  'html': {
@@ -290,6 +305,8 @@ autocmd BufWinEnter /etc/varnish/*.vcl setfiletype conf
 autocmd FileType gitcommit,html,smarty,eruby,slim,po setlocal spell
 autocmd BufWinEnter /etc/cron.d/* set noexpandtab
 autocmd BufWinEnter .eslintrc set ft=json
+autocmd BufNewFile,BufRead *.prisma set ft=graphql
+autocmd BufNewFile,BufRead *.vcl set cindent
 
 " Nvim's terminal w00t
 if has('nvim')
@@ -307,6 +324,7 @@ endif
 " Improved tab completion (:tabe awd<tab>)
 set wildmode=longest,list,full
 set wildmenu
+set wildignore+=.git
 
 " For tmux
 set lazyredraw
@@ -328,7 +346,7 @@ set formatoptions& formatoptions+=mM
 
 " Don't highlight tabs in projects that use tabs as indentation
 if exists("g:loaded_EditorConfig")
-    function g:SetListChars(config)
+    function! g:SetListChars(config)
         if has_key(a:config, "indent_style")
             if a:config["indent_style"] == "tab"
                 set listchars=tab:\ \ ,nbsp:¶,eol:¬

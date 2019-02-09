@@ -2,8 +2,10 @@
 	email = martin@m4r7.in
 	name = Martin Pedersen
 [push]
-	default = simple
+	default = current
 [core]
 	excludesfile = ~/dotfiles/.gitignore_global
 [pull]
 	rebase = true
+[alias]
+	co = checkout

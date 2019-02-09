@@ -36,3 +36,26 @@ alias e=edit
 alias sudo='sudo '
 alias ..='cd ..'
 alias ....='cd ../..'
+
+# reload bashrc
+resource() {
+    source ~/.bashrc
+}
+
+# wrap command in «git stash»
+stashwrap() {
+    cmd="$@"
+    git stash
+    $cmd
+    git stash pop
+}
+
+# port forwarding
+portforward() {
+    from="$1"
+    to="$2"
+
+    echo "http://$HOSTNAME:$from will now point to port $to"
+
+    socat "TCP-LISTEN:$from,fork" "TCP:127.0.0.1:$to"
+}
