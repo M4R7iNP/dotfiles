@@ -1,6 +1,7 @@
 " Martins .vimrc
 " Please modify and redistribute
 
+" General options {{{
 syntax on
 set nu
 set nowrap
@@ -71,13 +72,15 @@ set nocompatible
 filetype off
 set t_Co=256
 set laststatus=2
+" }}}
 
+" Plugins {{{
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-" Vundle plugins
 Plugin 'gmarik/Vundle.vim'
 Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-rhubarb'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-speeddating'
 Plugin 'L9'
@@ -97,6 +100,8 @@ Plugin 'benmills/vimux'
 Plugin 'sbdchd/neoformat' " runs e.g. prettier
 Plugin 'ctrlpvim/ctrlp.vim' " ctrlp search
 Plugin 'w0rp/ale' " lint
+Plugin 'sjl/gundo.vim'
+Plugin 'ludovicchabant/vim-gutentags'
 
 " language specific plugins
 Plugin 'othree/html5.vim'
@@ -113,12 +118,14 @@ Plugin 'M4R7iNP/vim-nginx'
 Plugin 'Glench/Vim-Jinja2-Syntax'
 Plugin 'digitaltoad/vim-pug'
 Plugin 'Shougo/neco-vim'
+Plugin 'Shougo/neco-syntax'
 Plugin 'jparise/vim-graphql'
 Plugin 'derekwyatt/vim-scala'
 Plugin 'slim-template/vim-slim'
 Plugin 'wokalski/autocomplete-flow'
 Plugin 'fgsch/vim-varnish'
-Plugin 'ludovicchabant/vim-gutentags'
+Plugin 'jwalton512/vim-blade'
+Plugin 'shawncplus/phpcomplete.vim'
 
 if has('python')
     Plugin 'editorconfig/editorconfig-vim'
@@ -134,9 +141,12 @@ if has('nvim')
         " Use deoplete
         Plugin 'Shougo/deoplete.nvim'
         let g:deoplete#enable_at_startup = 1
+        let g:deoplete#auto_complete_start_length = 1
+        let g:deoplete#enable_smart_case = 1
         let g:deoplete#tag#cache_limit_size = 5000000
         let g:deoplete#omni_patterns = {
-            \ 'php': '\w+|[^. \t]->\w*|\w+::\w*'
+            \ 'javascript': '[^. *\t]\.\w*',
+            \ 'php': '\h\w*\|[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?',
         \ }
 
         Plugin 'Shougo/denite.nvim'
@@ -149,7 +159,9 @@ end
 call vundle#end()
 filetype plugin indent on
 
-" plugin options
+"}}}
+
+" Plugin options {{{
 let g:mta_filetypes = { 'html' : 1, 'xhtml' : 1, 'xml' : 1, 'jinja' : 1, 'smarty': 1 }
 let g:user_emmet_expandabbr_key = '<C-Z>'
 let g:use_emmet_complete_tag = 1
@@ -164,7 +176,12 @@ let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
 let g:ale_linters_ignore = {'typescript': ['tslint', 'tsserver'], 'javascript': ['tslint', 'tsserver']}
 let g:yats_host_keyword = 0
+let php_sql_query = 1
+let g:sql_type_default = 'postgresql'
+let php_folding = 1
+" }}}
 
+" Emmet options {{{
 let g:user_emmet_settings = {
 \  'html': {
 \    'expandos': {
@@ -201,9 +218,22 @@ let g:user_emmet_settings = {
 \  }
 \}
 
+"}}}
+
+" Autocmds {{{
+au BufWinEnter /etc/nginx/*.conf setfiletype nginx
+au BufWinEnter ~/nginx-config/sites-*/* setfiletype nginx
+au BufWinEnter /etc/varnish/*.vcl setfiletype conf
+au FileType gitcommit,html,smarty,eruby,slim,po setlocal spell
+au BufWinEnter /etc/cron.d/* set noexpandtab
+au BufWinEnter .eslintrc set ft=json
+au BufNewFile,BufRead *.prisma set ft=graphql
+au BufNewFile,BufRead *.vcl set cindent
 au BufNewFile *.php :Emmet phphead
 au BufNewFile lib/modules/*.php :Emmet aethermodule
 au Filetype xml setlocal makeprg=generateConfig\ %
+au FileType vim set foldmethod=marker
+au FileType php setlocal omnifunc=phpcomplete_extended#CompletePHP
 
 function! EnableGraphqlSyntaxHighlighting()
     if exists('b:current_syntax')
@@ -248,14 +278,16 @@ function! EnableSqlSyntaxHighlighting()
 endfunction
 
 au Filetype javascript call EnableSqlSyntaxHighlighting()
+"}}}
 
-" Spell
+" Spell {{{
 set spelllang=en,nb
 set spellcapcheck=
 hi SpellBad ctermbg=52
 let g:spellfile_URL = 'http://ftp.vim.org/vim/runtime/spell'
+"}}}
 
-"### Remappings ###"
+" Remappings {{{
 
 map <S-Left> <Left>
 map <S-Right> <Right>
@@ -299,16 +331,7 @@ map <leader>s :split <C-R>=expand("%:h") . "/" <CR>
 map <leader>v :vsp <C-R>=expand("%:h") . "/" <CR>
 noremap <leader>f :Neoformat<CR>
 
-autocmd BufWinEnter /etc/nginx/*.conf setfiletype nginx
-autocmd BufWinEnter ~/nginx-config/sites-*/* setfiletype nginx
-autocmd BufWinEnter /etc/varnish/*.vcl setfiletype conf
-autocmd FileType gitcommit,html,smarty,eruby,slim,po setlocal spell
-autocmd BufWinEnter /etc/cron.d/* set noexpandtab
-autocmd BufWinEnter .eslintrc set ft=json
-autocmd BufNewFile,BufRead *.prisma set ft=graphql
-autocmd BufNewFile,BufRead *.vcl set cindent
-
-" Nvim's terminal w00t
+" Nvim's terminal
 if has('nvim')
     tnoremap <Esc> <C-\><C-n>
     tnoremap <Tab> <C-\><C-n>
@@ -320,6 +343,10 @@ if has('nvim')
 
     autocmd TermOpen * setlocal nolist
 endif
+
+"}}}
+
+" Misc {{{
 
 " Improved tab completion (:tabe awd<tab>)
 set wildmode=longest,list,full
@@ -334,6 +361,8 @@ cnoreabbrev tbae tabe
 cnoreabbrev vps vsp
 inoreabbrev requrie require
 inoreabbrev esacpe escape
+
+" C-k + ./ => …
 digraph ./ 8230
 
 " Nicer window scrolling
@@ -341,7 +370,7 @@ set scrolloff=4
 set sidescrolloff=15
 set sidescroll=1
 
-" I dont recall what this does
+" Improve joining lines
 set formatoptions& formatoptions+=mM
 
 " Don't highlight tabs in projects that use tabs as indentation
@@ -367,3 +396,4 @@ set completeopt=longest,menuone
 if filereadable(expand("$HOME") . "/.local/.vimrc")
     source $HOME/.local/.vimrc
 endif
+"}}}
