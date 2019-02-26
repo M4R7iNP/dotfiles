@@ -101,7 +101,6 @@ Plugin 'sbdchd/neoformat' " runs e.g. prettier
 Plugin 'ctrlpvim/ctrlp.vim' " ctrlp search
 Plugin 'w0rp/ale' " lint
 Plugin 'sjl/gundo.vim'
-Plugin 'ludovicchabant/vim-gutentags'
 
 " language specific plugins
 Plugin 'othree/html5.vim'
@@ -130,6 +129,10 @@ Plugin 'shawncplus/phpcomplete.vim'
 if has('python')
     Plugin 'editorconfig/editorconfig-vim'
 endif
+
+if has('nvim') || v:version >= 800
+    Plugin 'ludovicchabant/vim-gutentags'
+end
 
 if has('nvim')
     " Plugin 'benekastah/neomake'
