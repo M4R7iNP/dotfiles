@@ -177,7 +177,7 @@ let g:neoformat_try_formatprg = 1
 let g:neoformat_enabled_scss = ['prettier']
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
-let g:ale_linters_ignore = {'typescript': ['tslint', 'tsserver'], 'javascript': ['tslint', 'tsserver']}
+" let g:ale_linters_ignore = {'typescript': ['tslint', 'tsserver'], 'javascript': ['tslint', 'tsserver']}
 let g:yats_host_keyword = 0
 let php_sql_query = 1
 let g:sql_type_default = 'postgresql'
@@ -234,9 +234,24 @@ au BufNewFile,BufRead *.prisma set ft=graphql
 au BufNewFile,BufRead *.vcl set cindent
 au BufNewFile *.php :Emmet phphead
 au BufNewFile lib/modules/*.php :Emmet aethermodule
+au BufNewFile * nested call OpenClosestJsFile()
 au Filetype xml setlocal makeprg=generateConfig\ %
 au FileType vim set foldmethod=marker
 au FileType php setlocal omnifunc=phpcomplete_extended#CompletePHP
+au Filetype javascript.jsx call EnableGraphqlSyntaxHighlighting()
+au Filetype javascript call EnableSqlSyntaxHighlighting()
+" au FileType javascript setlocal foldmethod=syntax
+"}}}
+
+" Functions {{{
+function! OpenClosestJsFile()
+    let l:paths=[expand('%') . '.js', expand('%') . 'js', expand('%') . '.ts', expand('%') . 'ts']
+    for l:path in l:paths
+        if filereadable(l:path)
+            execute 'edit' fnameescape(l:path)
+        endif
+    endfor
+endfunction
 
 function! EnableGraphqlSyntaxHighlighting()
     if exists('b:current_syntax')
@@ -260,8 +275,6 @@ function! EnableGraphqlSyntaxHighlighting()
     hi link jsGraphqlStart StorageClass
 endfunction
 
-au Filetype javascript.jsx call EnableGraphqlSyntaxHighlighting()
-
 function! EnableSqlSyntaxHighlighting()
     if exists('b:current_syntax')
         unlet b:current_syntax
@@ -279,8 +292,6 @@ function! EnableSqlSyntaxHighlighting()
 
     syn region SQLEmbedded start=+\z(['"`]\)\zs\_s*\v(ALTER|CALL|COMMENT|COMMIT|CONNECT|CREATE|DELETE|DROP|EXPLAIN|EXPORT|GRANT|IMPORT|INSERT|LOAD|LOCK|MERGE|REFRESH|RENAME|REPLACE|REVOKE|ROLLBACK|SELECT|WITH|SET|TRUNCATE|UNLOAD|UNSET|UPDATE|UPSERT)+ skip=+\\\z1+ end=+\ze\z1+ contains=@SQL containedin=jsTemplateString keepend extend
 endfunction
-
-au Filetype javascript call EnableSqlSyntaxHighlighting()
 "}}}
 
 " Spell {{{

@@ -1,13 +1,14 @@
 # Atom key bindings
 
 # Remap esc to tab
-'atom-text-editor.vim-mode':
-  'tab': 'vim-mode:reset-normal-mode'
-'atom-text-editor.vim-mode:not(.normal-mode)':
-  'tab': 'vim-mode:activate-normal-mode'
+'atom-text-editor.vim-mode-plus':
+  'tab': 'vim-mode-plus:reset-normal-mode'
+'atom-text-editor.vim-mode-plus:not(.normal-mode)':
+  'tab': 'vim-mode-plus:activate-normal-mode'
 
-'atom-text-editor:not([mini]).vim-mode.insert-mode':
-  'shift-tab': 'editor:indent'
+'atom-text-editor:not([mini]).vim-mode-plus.insert-mode':
+  'shift-tab': 'editor:indent',
+  'shift-enter': 'editor:newline' # Fix shift-enter
 
 # Remap ctrl-l and ctrl-h to tab navigation
 'body':
@@ -16,7 +17,3 @@
 'atom-workspace atom-text-editor':
   'ctrl-h': 'pane:show-previous-item',
   'ctrl-l': 'pane:show-next-item'
-
-# Fix shift-enter
-'atom-text-editor:not([mini]).vim-mode.insert-mode':
-  'shift-enter': 'editor:newline'

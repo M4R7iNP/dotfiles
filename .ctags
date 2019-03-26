@@ -2,6 +2,7 @@
 --exclude=thirdparty
 --exclude=3rdparty
 --exclude=node_modules
+--exclude=lib
 --totals=yes
 --tag-relative=yes
 --links=no
