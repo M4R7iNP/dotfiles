@@ -8,3 +8,4 @@
 --links=no
 --fields=+aimlS
 --PHP-kinds=+cf
+--output-format=e-ctags

@@ -182,6 +182,7 @@ let g:yats_host_keyword = 0
 let php_sql_query = 1
 let g:sql_type_default = 'postgresql'
 let php_folding = 1
+let g:gutentags_ctags_extra_args = ['--output-format=e-ctags']
 " }}}
 
 " Emmet options {{{
@@ -237,7 +238,8 @@ au BufNewFile lib/modules/*.php :Emmet aethermodule
 au BufNewFile * nested call OpenClosestJsFile()
 au Filetype xml setlocal makeprg=generateConfig\ %
 au FileType vim set foldmethod=marker
-au FileType php setlocal omnifunc=phpcomplete_extended#CompletePHP
+" au FileType php setlocal omnifunc=phpcomplete_extended#CompletePHP
+au FileType php setlocal omnifunc=phpcomplete#CompletePHP
 au Filetype javascript.jsx call EnableGraphqlSyntaxHighlighting()
 au Filetype javascript call EnableSqlSyntaxHighlighting()
 " au FileType javascript setlocal foldmethod=syntax
@@ -403,7 +405,7 @@ if exists("g:loaded_EditorConfig")
 endif
 
 " Improve go-to-definition and omnicompletion behavior
-nnoremap g] <C-w><C-]><C-w>T
+nmap g] <C-w><C-]><C-w>T
 set completeopt=longest,menuone
 
 " I have local .vimrc in ~/.local/.vimrc
