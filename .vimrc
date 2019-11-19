@@ -23,6 +23,9 @@ set splitbelow
 set splitright
 set undolevels=1000
 set undoreload=10000
+if exists('&signcolumn')
+    set signcolumn=yes
+endif
 
 if has('nvim')
     set undofile
@@ -101,6 +104,7 @@ Plugin 'sbdchd/neoformat' " runs e.g. prettier
 Plugin 'ctrlpvim/ctrlp.vim' " ctrlp search
 Plugin 'w0rp/ale' " lint
 Plugin 'sjl/gundo.vim'
+Plugin 'elixir-editors/vim-elixir'
 
 " language specific plugins
 Plugin 'othree/html5.vim'
@@ -110,6 +114,7 @@ Plugin 'mxw/vim-jsx'
 " Plugin 'leafgarland/typescript-vim'
 Plugin 'M4R7iNP/yats.vim'
 Plugin 'mhartington/nvim-typescript'
+" Plugin 'peitalin/vim-jsx-typescript'
 Plugin 'simeng/vim-imba'
 Plugin 'M4R7iNP/smarty.vim'
 Plugin 'M4R7iNP/vim-inky'
@@ -125,6 +130,8 @@ Plugin 'wokalski/autocomplete-flow'
 Plugin 'fgsch/vim-varnish'
 Plugin 'jwalton512/vim-blade'
 Plugin 'shawncplus/phpcomplete.vim'
+Plugin 'rust-lang/rust.vim'
+Plugin 'GutenYe/json5.vim'
 
 if has('python')
     Plugin 'editorconfig/editorconfig-vim'
@@ -151,7 +158,10 @@ if has('nvim')
             \ 'javascript': '[^. *\t]\.\w*',
             \ 'php': '\h\w*\|[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?',
         \ }
+        let g:echodoc#enable_at_startup = 1
+        let g:echodoc#type = 'virtual'
 
+        Plugin 'Shougo/echodoc.vim'
         Plugin 'Shougo/denite.nvim'
     endif
 else
@@ -167,7 +177,7 @@ filetype plugin indent on
 " Plugin options {{{
 let g:mta_filetypes = { 'html' : 1, 'xhtml' : 1, 'xml' : 1, 'jinja' : 1, 'smarty': 1 }
 let g:user_emmet_expandabbr_key = '<C-Z>'
-let g:use_emmet_complete_tag = 1
+let g:user_emmet_complete_tag = 1
 let g:smarty_conceal_translated_strings = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:javascript_enable_domhtmlcss = 1
@@ -199,6 +209,7 @@ let g:user_emmet_settings = {
 \    }
 \  },
 \  'php': {
+\    'extends': 'html',
 \    'snippets': {
 \      'aethermodule': "class ${cursor} extends AetherModule {\n\tfunction run() {\n\t\t\\$tpl = \\$this->sl->getTemplate();\n\t\t\\$config = \\$this->sl->get(\"aetherConfig\");\n\n\t}\r}",
 \      'phphead': "<?php\n"
@@ -216,9 +227,6 @@ let g:user_emmet_settings = {
 \      'assign': "{assign |}",
 \      'foreach': "{foreach |}\n{/foreach}"
 \    }
-\  },
-\  'javascript.jsx': {
-\     'extends': 'jsx'
 \  }
 \}
 
@@ -247,7 +255,15 @@ au Filetype javascript call EnableSqlSyntaxHighlighting()
 
 " Functions {{{
 function! OpenClosestJsFile()
-    let l:paths=[expand('%') . '.js', expand('%') . 'js', expand('%') . '.ts', expand('%') . 'ts']
+    let l:paths=[
+    \   expand('%') . '.js',
+    \   expand('%') . 'js',
+    \   expand('%') . '.jsx',
+    \   expand('%') . 'jsx',
+    \   expand('%') . '.ts',
+    \   expand('%') . 'ts',
+    \   expand('%') . 'tsx',
+    \   expand('%') . '.tsx' ]
     for l:path in l:paths
         if filereadable(l:path)
             execute 'edit' fnameescape(l:path)
@@ -294,6 +310,19 @@ function! EnableSqlSyntaxHighlighting()
 
     syn region SQLEmbedded start=+\z(['"`]\)\zs\_s*\v(ALTER|CALL|COMMENT|COMMIT|CONNECT|CREATE|DELETE|DROP|EXPLAIN|EXPORT|GRANT|IMPORT|INSERT|LOAD|LOCK|MERGE|REFRESH|RENAME|REPLACE|REVOKE|ROLLBACK|SELECT|WITH|SET|TRUNCATE|UNLOAD|UNSET|UPDATE|UPSERT)+ skip=+\\\z1+ end=+\ze\z1+ contains=@SQL containedin=jsTemplateString keepend extend
 endfunction
+
+function! ToggleExtraGraphicalSymbols()
+    set nu!
+    set list!
+    GitGutterToggle
+    if exists('&signcolumn')
+        if &signcolumn =~ "yes"
+            set signcolumn=no
+        else
+            set signcolumn=yes
+        endif
+    endif
+endfunction
 "}}}
 
 " Spell {{{
@@ -326,7 +355,7 @@ inoremap <Tab> <Esc>
 vnoremap <Tab> <Esc>
 
 nnoremap <F3> :set hls!<CR>
-nnoremap <F4> :set nu!<CR>:set list!<CR>:GitGutterToggle<CR>
+nnoremap <F4> :call ToggleExtraGraphicalSymbols()<CR>
 
 " Leader mappings
 map <silent> <leader>gs :Gstatus<cr>

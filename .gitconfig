@@ -7,5 +7,7 @@
 	excludesfile = ~/dotfiles/.gitignore_global
 [pull]
 	rebase = true
+[rebase]
+	autostash = true
 [alias]
 	co = checkout
