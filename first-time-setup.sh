@@ -113,6 +113,9 @@ then
     make install
 
     popd
+
+    mkdir ~/.ctags.d
+    ln -sf ~/dotfiles/.ctags ~/.ctags/AAA.ctags
 fi
 
 source ~/.bashrc
