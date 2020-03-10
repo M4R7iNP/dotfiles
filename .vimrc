@@ -250,7 +250,8 @@ au FileType vim set foldmethod=marker
 au FileType php setlocal omnifunc=phpcomplete#CompletePHP
 au Filetype javascript.jsx call EnableGraphqlSyntaxHighlighting()
 au Filetype javascript call EnableSqlSyntaxHighlighting()
-" au FileType javascript setlocal foldmethod=syntax
+au FileType javascript setlocal foldmethod=syntax
+au FileType typescript setlocal foldmethod=syntax
 "}}}
 
 " Functions {{{
@@ -375,6 +376,7 @@ map <leader>t :tabe <C-R>=expand("%:h") . "/" <CR>
 map <leader>s :split <C-R>=expand("%:h") . "/" <CR>
 map <leader>v :vsp <C-R>=expand("%:h") . "/" <CR>
 noremap <leader>f :Neoformat<CR>
+noremap <leader>minify :'<,'>!terser<CR>
 
 " Nvim's terminal
 if has('nvim')
@@ -403,6 +405,7 @@ set lazyredraw
 
 " Hwo 2 witre plz
 cnoreabbrev tbae tabe
+cnoreabbrev taeb tabe
 cnoreabbrev vps vsp
 inoreabbrev requrie require
 inoreabbrev esacpe escape
