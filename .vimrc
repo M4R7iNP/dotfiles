@@ -133,7 +133,7 @@ Plugin 'shawncplus/phpcomplete.vim'
 Plugin 'rust-lang/rust.vim'
 Plugin 'GutenYe/json5.vim'
 
-if has('python')
+if has('python') || has('python3')
     Plugin 'editorconfig/editorconfig-vim'
 endif
 
@@ -150,17 +150,6 @@ if has('nvim')
     if has('python3')
         " Use deoplete
         Plugin 'Shougo/deoplete.nvim'
-        let g:deoplete#enable_at_startup = 1
-        let g:deoplete#auto_complete_start_length = 1
-        let g:deoplete#enable_smart_case = 1
-        let g:deoplete#tag#cache_limit_size = 5000000
-        let g:deoplete#omni_patterns = {
-            \ 'javascript': '[^. *\t]\.\w*',
-            \ 'php': '\h\w*\|[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?',
-        \ }
-        let g:echodoc#enable_at_startup = 1
-        let g:echodoc#type = 'virtual'
-
         Plugin 'Shougo/echodoc.vim'
         Plugin 'Shougo/denite.nvim'
     endif
@@ -185,14 +174,28 @@ let g:javascript_plugin_flow = 1
 let g:multi_cursor_quit_key = '<Tab>'
 let g:neoformat_try_formatprg = 1
 let g:neoformat_enabled_scss = ['prettier']
+let g:neoformat_enabled_typescriptreact = ['prettier']
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
 " let g:ale_linters_ignore = {'typescript': ['tslint', 'tsserver'], 'javascript': ['tslint', 'tsserver']}
-let g:yats_host_keyword = 0
+" let g:yats_host_keyword = 0
 let php_sql_query = 1
 let g:sql_type_default = 'postgresql'
 let php_folding = 1
-let g:gutentags_ctags_extra_args = ['--output-format=e-ctags']
+let g:gutentags_ctags_extra_args = ['--output-format=e-ctags', '--options=' . $HOME . '/dotfiles/.ctags']
+let g:echodoc#enable_at_startup = 1
+let g:echodoc#type = 'virtual'
+highlight link EchoDocFloat Pmenu
+let g:deoplete#enable_at_startup = 1
+if exists("*deoplete#custom#option")
+    call deoplete#custom#option({
+        \ 'smart_case': v:true,
+        \ 'omni_patterns': {
+            \ 'javascript': '[^. *\t]\.\w*',
+            \ 'php': '\h\w*\|[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?',
+        \ }
+    \ })
+endif
 " }}}
 
 " Emmet options {{{

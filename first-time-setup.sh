@@ -114,6 +114,7 @@ then
 
     popd
 
+    # https://docs.ctags.io/en/latest/optlib.html#preload-option-file
     mkdir ~/.ctags.d
     ln -sf ~/dotfiles/.ctags ~/.ctags/AAA.ctags
 fi
