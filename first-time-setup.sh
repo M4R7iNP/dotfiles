@@ -73,6 +73,16 @@ then
     dconf write /org/gnome/desktop/input-sources/xkb-options "['lv3:ralt_switch', 'grp:alt_shift_toggle']"
     dconf write /org/gnome/desktop/wm/preferences/mouse-button-modifier "'<Alt>'"
     dconf write /org/gnome/desktop/wm/preferences/resize-with-right-button true
+    dconf write /org/gnome/desktop/input-sources/sources "[('xkb', 'us'), ('xkb', 'no')]"
+
+    # kb shortcuts
+    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/binding "'<Pimary><Alt>t'"
+    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/command 'gnomee-terminal'
+    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/name 'gnome-terminal'
+    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/binding "'<Super>e'"
+    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/command 'nautilus'
+    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/name 'nautilus'
+    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']"
 fi
 
 if [ ! -e ~/.vim/bundle ];
