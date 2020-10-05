@@ -108,7 +108,7 @@ Plugin 'elixir-editors/vim-elixir'
 
 " language specific plugins
 Plugin 'othree/html5.vim'
-Plugin 'orourkek/vim-less'
+" Plugin 'orourkek/vim-less'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
 " Plugin 'leafgarland/typescript-vim'

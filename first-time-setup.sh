@@ -1,10 +1,7 @@
 #!/bin/bash
 
 # Import distro info variables
-for f in /etc/*-release;
-do
-    . "$f"
-done
+. /etc/os-release;
 
 PUT_IN_BASHRC=". ~/dotfiles/.bashrc"
 if ! grep -q "$PUT_IN_BASHRC" ~/.bashrc;
@@ -33,21 +30,35 @@ then
     then
         sudo apt-get update
         sudo apt-get install ${PACKAGES[@]}
+
+        read -p "Install neovim? [N|y] " -n 1 -r && echo
+        [[ "$REPLY" =~ ^[Yy]$ ]] && \
+            sudo apt install -y neovim && \
+            pip install --user neovim && \
+            npm i -g neovim
+    elif [ "$ID" == "fedora" ];
+    then
+        sudo yum install -y vim \
+            curl \
+            tmux \
+            automake \
+            terminator \
+
+        read -p "Install neovim? [N|y] " -n 1 -r && echo
+        [[ "$REPLY" =~ ^[Yy]$ ]] && \
+            sudo yum install -y neovim && \
+            pip install --user neovim && \
+            npm i -g neovim
+
+        read -p "Install logid? [N|y] " -n 1 -r && echo
+        [[ "$REPLY" =~ ^[Yy]$ ]] && \
+            sudo yum install -y logid && \
+            sudo ln -sf ~/dotfiles/logid.cfg /etc/logid.cfg &&
+            sudo systemctl enable logid &&
+            sudo systemctl start logid
     elif [ "$ID" == "arch" ];
     then
         sudo pacman -Su ${PACKAGES[@]}
-    fi
-
-    # I ♥ unity
-    if [ "$XDG_CURRENT_DESKTOP" == "Unity" ];
-    then
-        sudo apt-get install \
-            indicator-multiload \
-            compizconfig-settings-manager \
-            compiz-plugins-extra
-
-        # TODO: find a way to import unity profile from command line
-        echo "Remember to import your unity profile!";
     fi
 fi
 
