@@ -62,6 +62,19 @@ then
     fi
 fi
 
+if ps aux | grep -q gnome-shell;
+then
+    dconf write /org/gnome/desktop/interface/enable-animations false
+
+    # kb & mouse
+    dconf write /org/gnome/desktop/peripherals/mouse/accel-profile \'flat\'
+    dconf write /org/gnome/desktop/interface/gtk-enable-primary-paste false
+    dconf write /org/gnome/desktop/input-sources/show-all-sources true
+    dconf write /org/gnome/desktop/input-sources/xkb-options "['lv3:ralt_switch', 'grp:alt_shift_toggle']"
+    dconf write /org/gnome/desktop/wm/preferences/mouse-button-modifier "'<Alt>'"
+    dconf write /org/gnome/desktop/wm/preferences/resize-with-right-button true
+fi
+
 if [ ! -e ~/.vim/bundle ];
 then
     git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
