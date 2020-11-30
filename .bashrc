@@ -36,6 +36,9 @@ alias e=edit
 alias sudo='sudo '
 alias ..='cd ..'
 alias ....='cd ../..'
+alias ..2='cd ../..'
+alias ..3='cd ../../..'
+alias ..4='cd ../../../..'
 
 # reload bashrc
 resource() {
