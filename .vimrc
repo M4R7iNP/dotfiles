@@ -267,6 +267,8 @@ au Filetype javascript.jsx call EnableGraphqlSyntaxHighlighting()
 au Filetype javascript call EnableSqlSyntaxHighlighting()
 au FileType javascript setlocal foldmethod=syntax
 au FileType typescript setlocal foldmethod=syntax
+au Filetype javascript.jsx nested call OpenCssModule()
+au FileType yaml set sw=2
 "}}}
 
 " Functions {{{
@@ -285,6 +287,18 @@ function! OpenClosestJsFile()
             execute 'edit' fnameescape(l:path)
         endif
     endfor
+endfunction
+
+function! OpenCssModule()
+    let l:css_module_path = substitute(expand('%'), '\.js$', '.module.css', '')
+    if l:css_module_path == expand('%')
+        return
+    endif
+
+    if filereadable(l:css_module_path)
+        execute 'vsplit' l:css_module_path
+        wincmd w
+    endif
 endfunction
 
 function! EnableGraphqlSyntaxHighlighting()
