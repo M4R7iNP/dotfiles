@@ -150,6 +150,17 @@ if has('nvim')
     if has('python3')
         " Use deoplete
         Plugin 'Shougo/deoplete.nvim'
+        let g:deoplete#enable_at_startup = 1
+        " let g:deoplete#auto_complete_start_length = 1
+        " let g:deoplete#enable_smart_case = 1
+        let g:deoplete#tag#cache_limit_size = 5000000
+        let g:deoplete#omni_patterns = {
+            \ 'javascript': '[^. *\t]\.\w*',
+            \ 'php': '\h\w*\|[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?',
+        \ }
+        let g:echodoc#enable_at_startup = 1
+        let g:echodoc#type = 'virtual'
+
         Plugin 'Shougo/echodoc.vim'
         Plugin 'Shougo/denite.nvim'
     endif
