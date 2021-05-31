@@ -109,6 +109,7 @@ Plugin 'elixir-editors/vim-elixir'
 " language specific plugins
 Plugin 'othree/html5.vim'
 " Plugin 'orourkek/vim-less'
+" Plugin 'groenewege/vim-less'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
 " Plugin 'leafgarland/typescript-vim'
@@ -390,7 +391,7 @@ map <leader>t :tabe <C-R>=expand("%:h") . "/" <CR>
 map <leader>s :split <C-R>=expand("%:h") . "/" <CR>
 map <leader>v :vsp <C-R>=expand("%:h") . "/" <CR>
 noremap <leader>f :Neoformat<CR>
-noremap <leader>minify :'<,'>!terser<CR>
+noremap <leader>minify :'<,'>!terser -m<CR>
 
 " Nvim's terminal
 if has('nvim')
@@ -423,6 +424,7 @@ cnoreabbrev taeb tabe
 cnoreabbrev vps vsp
 inoreabbrev requrie require
 inoreabbrev esacpe escape
+inoreabbrev articel article
 
 " C-k + ./ => …
 digraph ./ 8230
