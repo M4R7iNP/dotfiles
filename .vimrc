@@ -78,68 +78,64 @@ set laststatus=2
 " }}}
 
 " Plugins {{{
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+call plug#begin(stdpath('data') . '/plugged')
 
-Plugin 'gmarik/Vundle.vim'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-rhubarb'
-Plugin 'tpope/vim-unimpaired'
-Plugin 'tpope/vim-speeddating'
-Plugin 'L9'
-Plugin 'FuzzyFinder'
-Plugin 'bling/vim-airline'
-Plugin 'mattn/emmet-vim'
-Plugin 'ap/vim-css-color'
-Plugin 'vim-ruby/vim-ruby'
-Plugin 'kshenoy/vim-signature'
-Plugin 'terryma/vim-multiple-cursors'
-Plugin 'jakobwesthoff/argumentrewrap'
-Plugin 'godlygeek/tabular'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'ntpeters/vim-better-whitespace'
-Plugin 'majutsushi/tagbar'
-Plugin 'benmills/vimux'
-Plugin 'sbdchd/neoformat' " runs e.g. prettier
-Plugin 'ctrlpvim/ctrlp.vim' " ctrlp search
-Plugin 'w0rp/ale' " lint
-Plugin 'sjl/gundo.vim'
-Plugin 'elixir-editors/vim-elixir'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-speeddating'
+" Plug 'L9'
+" Plug 'FuzzyFinder'
+Plug 'bling/vim-airline'
+Plug 'mattn/emmet-vim'
+Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
+Plug 'kshenoy/vim-signature'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'jakobwesthoff/argumentrewrap'
+Plug 'godlygeek/tabular'
+Plug 'airblade/vim-gitgutter'
+Plug 'ntpeters/vim-better-whitespace'
+Plug 'majutsushi/tagbar'
+Plug 'benmills/vimux'
+Plug 'sbdchd/neoformat' " runs e.g. prettier
+Plug 'ctrlpvim/ctrlp.vim' " ctrlp search
+" Plug 'w0rp/ale' " lint
+Plug 'sjl/gundo.vim'
+Plug 'elixir-editors/vim-elixir', { 'for': 'elixir' }
 
 " language specific plugins
-Plugin 'othree/html5.vim'
-" Plugin 'orourkek/vim-less'
-" Plugin 'groenewege/vim-less'
-Plugin 'pangloss/vim-javascript'
-Plugin 'mxw/vim-jsx'
-" Plugin 'leafgarland/typescript-vim'
-Plugin 'M4R7iNP/yats.vim'
-Plugin 'mhartington/nvim-typescript'
-" Plugin 'peitalin/vim-jsx-typescript'
-Plugin 'simeng/vim-imba'
-Plugin 'M4R7iNP/smarty.vim'
-Plugin 'M4R7iNP/vim-inky'
-Plugin 'M4R7iNP/vim-nginx'
-Plugin 'Glench/Vim-Jinja2-Syntax'
-Plugin 'digitaltoad/vim-pug'
-Plugin 'Shougo/neco-vim'
-Plugin 'Shougo/neco-syntax'
-Plugin 'jparise/vim-graphql'
-Plugin 'derekwyatt/vim-scala'
-Plugin 'slim-template/vim-slim'
-Plugin 'wokalski/autocomplete-flow'
-Plugin 'fgsch/vim-varnish'
-Plugin 'jwalton512/vim-blade'
-Plugin 'shawncplus/phpcomplete.vim'
-Plugin 'rust-lang/rust.vim'
-Plugin 'GutenYe/json5.vim'
+Plug 'othree/html5.vim', { 'for': ['html', 'javascript', 'typescript'] }
+" Plug 'orourkek/vim-less', { 'for': 'less' }
+Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'typescript'] }
+Plug 'mxw/vim-jsx', { 'for': ['javascript', 'typescript'] }
+Plug 'M4R7iNP/yats.vim', { 'for': ['javascript', 'typescript'] }
+Plug 'mhartington/nvim-typescript', { 'for': ['javascript', 'typescript'] }
+Plug 'simeng/vim-imba', { 'for': 'imba' }
+Plug 'M4R7iNP/smarty.vim', { 'for': 'smarty' }
+Plug 'M4R7iNP/vim-inky', { 'for': 'inky' }
+Plug 'M4R7iNP/vim-nginx', { 'for': 'nginx' }
+Plug 'Glench/Vim-Jinja2-Syntax', { 'for': 'jinja' }
+Plug 'digitaltoad/vim-pug', { 'for': 'pug' }
+Plug 'Shougo/neco-vim'
+Plug 'Shougo/neco-syntax'
+Plug 'jparise/vim-graphql'
+Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
+Plug 'slim-template/vim-slim', { 'for': 'slim' }
+" Plug 'wokalski/autocomplete-flow'
+Plug 'fgsch/vim-varnish', { 'for': 'vcl' }
+Plug 'jwalton512/vim-blade', { 'for': 'php' }
+Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
+Plug 'rust-lang/rust.vim', { 'for': 'rust' }
+Plug 'GutenYe/json5.vim'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'mattn/vim-lsp-settings'
 
 if has('python') || has('python3')
-    Plugin 'editorconfig/editorconfig-vim'
+    Plug 'editorconfig/editorconfig-vim'
 endif
 
 if has('nvim') || v:version >= 800
-    Plugin 'ludovicchabant/vim-gutentags'
+    " Plug 'ludovicchabant/vim-gutentags'
 end
 
 if has('nvim')
@@ -148,29 +144,24 @@ if has('nvim')
     " let g:neomake_javascript_enabled_makers = ['eslint']
     " let g:neomake_jsx_enabled_makers = ['eslint']
 
+    " Plug 'neoclide/coc.nvim', {'branch': 'release'}
     if has('python3')
         " Use deoplete
-        Plugin 'Shougo/deoplete.nvim'
-        let g:deoplete#enable_at_startup = 1
-        " let g:deoplete#auto_complete_start_length = 1
-        " let g:deoplete#enable_smart_case = 1
-        let g:deoplete#tag#cache_limit_size = 5000000
-        let g:deoplete#omni_patterns = {
-            \ 'javascript': '[^. *\t]\.\w*',
-            \ 'php': '\h\w*\|[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?',
-        \ }
+        " Plug 'Shougo/deoplete.nvim'
+        " let g:deoplete#enable_at_startup = 1
+        " let g:deoplete#tag#cache_limit_size = 5000000
         let g:echodoc#enable_at_startup = 1
         let g:echodoc#type = 'virtual'
 
-        Plugin 'Shougo/echodoc.vim'
-        Plugin 'Shougo/denite.nvim'
+        " Plug 'Shougo/echodoc.vim'
+        " Plug 'Shougo/denite.nvim'
     endif
 else
-    Plugin 'scrooloose/syntastic'
-    Plugin 'jaxbot/syntastic-react'
+    Plug 'scrooloose/syntastic'
+    Plug 'jaxbot/syntastic-react'
 end
 
-call vundle#end()
+call plug#end()
 filetype plugin indent on
 
 "}}}
@@ -189,6 +180,7 @@ let g:neoformat_enabled_scss = ['prettier']
 let g:neoformat_enabled_typescriptreact = ['prettier']
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+" let g:ale_linters = {'rust': ['rustc']}
 " let g:ale_linters_ignore = {'typescript': ['tslint', 'tsserver'], 'javascript': ['tslint', 'tsserver']}
 " let g:yats_host_keyword = 0
 let php_sql_query = 1
@@ -208,6 +200,15 @@ if exists("*deoplete#custom#option")
         \ }
     \ })
 endif
+
+let g:lsp_diagnostics_virtual_text_prefix = ' '
+let g:lsp_preview_doubletap = 0
+let g:lsp_preview_float = 0
+let g:lsp_preview_float = 0
+set omnifunc=lsp#complete
+set signcolumn=yes
+if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+
 " }}}
 
 " Emmet options {{{
@@ -250,25 +251,25 @@ let g:user_emmet_settings = {
 " Autocmds {{{
 au BufWinEnter /etc/nginx/*.conf setfiletype nginx
 au BufWinEnter ~/nginx-config/sites-*/* setfiletype nginx
-au BufWinEnter /etc/varnish/*.vcl setfiletype conf
 au FileType gitcommit,html,smarty,eruby,slim,po setlocal spell
 au BufWinEnter /etc/cron.d/* set noexpandtab
 au BufWinEnter .eslintrc set ft=json
 au BufNewFile,BufRead *.prisma set ft=graphql
-au BufNewFile,BufRead *.vcl set cindent
 au BufNewFile *.php :Emmet phphead
 au BufNewFile lib/modules/*.php :Emmet aethermodule
 au BufNewFile * nested call OpenClosestJsFile()
 au Filetype xml setlocal makeprg=generateConfig\ %
 au FileType vim set foldmethod=marker
 " au FileType php setlocal omnifunc=phpcomplete_extended#CompletePHP
-au FileType php setlocal omnifunc=phpcomplete#CompletePHP
+" au FileType php setlocal omnifunc=phpcomplete#CompletePHP
 au Filetype javascript.jsx call EnableGraphqlSyntaxHighlighting()
 au Filetype javascript call EnableSqlSyntaxHighlighting()
 au FileType javascript setlocal foldmethod=syntax
 au FileType typescript setlocal foldmethod=syntax
 au Filetype javascript.jsx nested call OpenCssModule()
 au FileType yaml set sw=2
+au Filetype vcl set cindent
+" au FileType javascript setlocal foldmethod=syntax
 "}}}
 
 " Functions {{{
