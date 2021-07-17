@@ -124,11 +124,18 @@ Plug 'slim-template/vim-slim', { 'for': 'slim' }
 " Plug 'wokalski/autocomplete-flow'
 Plug 'fgsch/vim-varnish', { 'for': 'vcl' }
 Plug 'jwalton512/vim-blade', { 'for': 'php' }
-Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 Plug 'GutenYe/json5.vim'
-Plug 'prabirshrestha/vim-lsp'
-Plug 'mattn/vim-lsp-settings'
+
+if has('nvim-0.5')
+    Plug 'neovim/nvim-lspconfig'
+    Plug 'hrsh7th/nvim-compe'
+elseif has('nvim')
+    Plug 'prabirshrestha/vim-lsp'
+    Plug 'mattn/vim-lsp-settings'
+else
+    " Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
+endif
 
 if has('python') || has('python3')
     Plug 'editorconfig/editorconfig-vim'
@@ -205,10 +212,33 @@ let g:lsp_diagnostics_virtual_text_prefix = ' '
 let g:lsp_preview_doubletap = 0
 let g:lsp_preview_float = 0
 let g:lsp_preview_float = 0
-set omnifunc=lsp#complete
 set signcolumn=yes
-if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
 
+if has('nvim-0.5')
+lua << END
+require'lspconfig'.phpactor.setup{}
+require'lspconfig'.tsserver.setup{}
+
+require'compe'.setup {
+  enabled = true;
+  autocomplete = true;
+  debug = false;
+  min_length = 1;
+  preselect = 'enable';
+  throttle_time = 80;
+  source_timeout = 200;
+  incomplete_delay = 400;
+  max_abbr_width = 100;
+  max_kind_width = 100;
+  max_menu_width = 100;
+  documentation = false;
+}
+
+END
+elseif has('nvim')
+    set omnifunc=lsp#complete
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+endif
 " }}}
 
 " Emmet options {{{
