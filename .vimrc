@@ -84,57 +84,68 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-speeddating'
-" Plug 'L9'
-" Plug 'FuzzyFinder'
 Plug 'bling/vim-airline'
 Plug 'mattn/emmet-vim'
-Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
 Plug 'kshenoy/vim-signature'
-Plug 'terryma/vim-multiple-cursors'
-Plug 'jakobwesthoff/argumentrewrap'
-Plug 'godlygeek/tabular'
 Plug 'airblade/vim-gitgutter'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'majutsushi/tagbar'
 Plug 'benmills/vimux'
 Plug 'sbdchd/neoformat' " runs e.g. prettier
-Plug 'ctrlpvim/ctrlp.vim' " ctrlp search
-" Plug 'w0rp/ale' " lint
 Plug 'sjl/gundo.vim'
-Plug 'elixir-editors/vim-elixir', { 'for': 'elixir' }
 
 " language specific plugins
-Plug 'othree/html5.vim', { 'for': ['html', 'javascript', 'typescript'] }
-" Plug 'orourkek/vim-less', { 'for': 'less' }
-Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'typescript'] }
-Plug 'mxw/vim-jsx', { 'for': ['javascript', 'typescript'] }
-Plug 'M4R7iNP/yats.vim', { 'for': ['javascript', 'typescript'] }
-Plug 'mhartington/nvim-typescript', { 'for': ['javascript', 'typescript'] }
 Plug 'simeng/vim-imba', { 'for': 'imba' }
 Plug 'M4R7iNP/smarty.vim', { 'for': 'smarty' }
 Plug 'M4R7iNP/vim-inky', { 'for': 'inky' }
 Plug 'M4R7iNP/vim-nginx', { 'for': 'nginx' }
 Plug 'Glench/Vim-Jinja2-Syntax', { 'for': 'jinja' }
 Plug 'digitaltoad/vim-pug', { 'for': 'pug' }
-Plug 'Shougo/neco-vim'
-Plug 'Shougo/neco-syntax'
 Plug 'jparise/vim-graphql'
 Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
 Plug 'slim-template/vim-slim', { 'for': 'slim' }
-" Plug 'wokalski/autocomplete-flow'
 Plug 'fgsch/vim-varnish', { 'for': 'vcl' }
 Plug 'jwalton512/vim-blade', { 'for': 'php' }
-Plug 'rust-lang/rust.vim', { 'for': 'rust' }
-Plug 'GutenYe/json5.vim'
+Plug 'GutenYe/json5.vim', { 'for': ['json', 'json5'] }
 
 if has('nvim-0.5')
     Plug 'neovim/nvim-lspconfig'
     Plug 'hrsh7th/nvim-compe'
+    Plug 'simrat39/rust-tools.nvim', { 'for': 'rust' }
 elseif has('nvim')
     Plug 'prabirshrestha/vim-lsp'
     Plug 'mattn/vim-lsp-settings'
+    Plug 'mhartington/nvim-typescript', { 'for': ['javascript', 'typescript'] }
 else
-    " Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
+    Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
+    Plug 'leafgarland/typescript-vim', { 'for': ['javascript', 'typescript'] }
+    Plug 'w0rp/ale' " lint
+endif
+
+" ctrlp search
+if has('nvim-0.5')
+    Plug 'nvim-lua/popup.nvim'
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'nvim-telescope/telescope.nvim'
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    Plug 'nvim-treesitter/playground'
+else
+    Plug 'ctrlpvim/ctrlp.vim'
+    Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
+    Plug 'elixir-editors/vim-elixir', { 'for': 'elixir' }
+    Plug 'othree/html5.vim', { 'for': ['html', 'javascript', 'typescript'] }
+    Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'typescript'] }
+    Plug 'mxw/vim-jsx', { 'for': ['javascript', 'typescript'] }
+    Plug 'M4R7iNP/yats.vim', { 'for': ['javascript', 'typescript'] }
+    Plug 'rust-lang/rust.vim', { 'for': 'rust' }
+endif
+
+if has ('nvim')
+    Plug 'tjdevries/colorbuddy.vim'
+    Plug 'tjdevries/gruvbuddy.nvim'
+    " Plug 'Th3Whit3Wolf/spacebuddy'
+    " Plug 'marko-cerovac/material.nvim'
+    " Plug 'norcalli/nvim-colorizer.lua'
 endif
 
 if has('python') || has('python3')
@@ -212,33 +223,81 @@ let g:lsp_diagnostics_virtual_text_prefix = ' '
 let g:lsp_preview_doubletap = 0
 let g:lsp_preview_float = 0
 let g:lsp_preview_float = 0
-set signcolumn=yes
 
 if has('nvim-0.5')
 lua << END
-require'lspconfig'.phpactor.setup{}
-require'lspconfig'.tsserver.setup{}
+
+require('telescope').setup{}
+
+local on_attach = function(client, bufnr)
+    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+end
+
+require'lspconfig'.phpactor.setup{ on_attach = on_attach }
+require'lspconfig'.tsserver.setup{ on_attach = on_attach }
+require'lspconfig'.rust_analyzer.setup{ on_attach = on_attach }
 
 require'compe'.setup {
-  enabled = true;
-  autocomplete = true;
-  debug = false;
-  min_length = 1;
-  preselect = 'enable';
-  throttle_time = 80;
-  source_timeout = 200;
-  incomplete_delay = 400;
-  max_abbr_width = 100;
-  max_kind_width = 100;
-  max_menu_width = 100;
-  documentation = false;
+    enabled = true;
+    autocomplete = true;
+    debug = false;
+    min_length = 1;
+    preselect = 'enable';
+    throttle_time = 80;
+    source_timeout = 200;
+    incomplete_delay = 400;
+    max_abbr_width = 100;
+    max_kind_width = 100;
+    max_menu_width = 100;
+    documentation = true;
+
+    source = {
+        path = true;
+        buffer = true;
+        nvim_lsp = true;
+        nvim_lua = true;
+    };
 }
+
+require('rust-tools').setup()
+
+require'nvim-treesitter.configs'.setup {
+    ensure_installed = {
+        "javascript",
+        "typescript",
+        "json",
+        "html",
+        "php",
+        "rust",
+        "lua",
+    },
+    indent = {
+        enable = true
+    },
+    highlight = {
+        enable = true,              -- false will disable the whole extension
+        -- disable = { },  -- list of language that will be disabled
+        additional_vim_regex_highlighting = false,
+    },
+    playground = {
+        enable = true,
+    }
+}
+
+-- require'colorizer'.setup{
+--     '*';
+-- }
 
 END
 elseif has('nvim')
     set omnifunc=lsp#complete
     if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
 endif
+
+if has('nvim-0.5')
+    nnoremap <C-p> <cmd>Telescope git_files<cr>
+endif
+
 " }}}
 
 " Emmet options {{{
@@ -294,8 +353,9 @@ au FileType vim set foldmethod=marker
 " au FileType php setlocal omnifunc=phpcomplete#CompletePHP
 au Filetype javascript.jsx call EnableGraphqlSyntaxHighlighting()
 au Filetype javascript call EnableSqlSyntaxHighlighting()
-au FileType javascript setlocal foldmethod=syntax
-au FileType typescript setlocal foldmethod=syntax
+au FileType javascript setlocal foldmethod=expr
+au FileType typescript setlocal foldmethod=expr
+au FileType typescript setlocal foldexpr=nvim_treesitter#foldexpr()
 au Filetype javascript.jsx nested call OpenCssModule()
 au FileType yaml set sw=2
 au Filetype vcl set cindent
@@ -403,6 +463,7 @@ imap <S-Right> <Right>
 " Switch tabs using Ctrl left/right
 nnoremap <C-L> gt
 nnoremap <C-H> gT
+nnoremap <Space> :TSHighlightCapturesUnderCursor<CR>
 
 " Disable annoying letters
 nnoremap Q <nop>

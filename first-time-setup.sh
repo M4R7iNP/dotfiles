@@ -109,7 +109,7 @@ ln -sf ~/.vim ~/.config/nvim
 ln -sf ~/dotfiles/terminator.config ~/.config/terminator/config
 
 # Install vim plugins
-vim +PluginInstall +qall
+vim +PlugInstall +qall
 
 NPM_PACKAGES=(
 eslint
