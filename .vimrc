@@ -89,7 +89,7 @@ Plug 'mattn/emmet-vim'
 Plug 'kshenoy/vim-signature'
 Plug 'airblade/vim-gitgutter'
 Plug 'ntpeters/vim-better-whitespace'
-Plug 'majutsushi/tagbar'
+" Plug 'majutsushi/tagbar'
 Plug 'benmills/vimux'
 Plug 'sbdchd/neoformat' " runs e.g. prettier
 Plug 'sjl/gundo.vim'
@@ -127,8 +127,8 @@ if has('nvim-0.5')
     Plug 'nvim-lua/popup.nvim'
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-telescope/telescope.nvim'
-    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-    Plug 'nvim-treesitter/playground'
+    " Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    " Plug 'nvim-treesitter/playground'
 else
     Plug 'ctrlpvim/ctrlp.vim'
     Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
@@ -261,6 +261,7 @@ require'compe'.setup {
 
 require('rust-tools').setup()
 
+--[[
 require'nvim-treesitter.configs'.setup {
     ensure_installed = {
         "javascript",
@@ -283,6 +284,7 @@ require'nvim-treesitter.configs'.setup {
         enable = true,
     }
 }
+]]--
 
 -- require'colorizer'.setup{
 --     '*';
