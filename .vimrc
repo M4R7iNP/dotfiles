@@ -110,7 +110,9 @@ Plug 'GutenYe/json5.vim', { 'for': ['json', 'json5'] }
 
 if has('nvim-0.5')
     Plug 'neovim/nvim-lspconfig'
-    Plug 'hrsh7th/nvim-compe'
+    Plug 'hrsh7th/cmp-nvim-lsp'
+    Plug 'hrsh7th/cmp-buffer'
+    Plug 'hrsh7th/nvim-cmp'
     Plug 'simrat39/rust-tools.nvim', { 'for': 'rust' }
 elseif has('nvim')
     Plug 'prabirshrestha/vim-lsp'
@@ -121,6 +123,11 @@ else
     Plug 'leafgarland/typescript-vim', { 'for': ['javascript', 'typescript'] }
     Plug 'w0rp/ale' " lint
 endif
+
+Plug 'othree/html5.vim', { 'for': ['html', 'javascript', 'typescript'] }
+Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'typescript'] }
+Plug 'M4R7iNP/yats.vim', { 'for': ['javascript', 'typescript'] }
+Plug 'mxw/vim-jsx', { 'for': ['javascript', 'typescript'] }
 
 " ctrlp search
 if has('nvim-0.5')
@@ -133,10 +140,6 @@ else
     Plug 'ctrlpvim/ctrlp.vim'
     Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
     Plug 'elixir-editors/vim-elixir', { 'for': 'elixir' }
-    Plug 'othree/html5.vim', { 'for': ['html', 'javascript', 'typescript'] }
-    Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'typescript'] }
-    Plug 'mxw/vim-jsx', { 'for': ['javascript', 'typescript'] }
-    Plug 'M4R7iNP/yats.vim', { 'for': ['javascript', 'typescript'] }
     Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 endif
 
@@ -233,33 +236,31 @@ local on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 end
 
-require'lspconfig'.phpactor.setup{ on_attach = on_attach }
-require'lspconfig'.tsserver.setup{ on_attach = on_attach }
-require'lspconfig'.rust_analyzer.setup{ on_attach = on_attach }
-
-require'compe'.setup {
-    enabled = true;
-    autocomplete = true;
-    debug = false;
-    min_length = 1;
-    preselect = 'enable';
-    throttle_time = 80;
-    source_timeout = 200;
-    incomplete_delay = 400;
-    max_abbr_width = 100;
-    max_kind_width = 100;
-    max_menu_width = 100;
-    documentation = true;
-
-    source = {
-        path = true;
-        buffer = true;
-        nvim_lsp = true;
-        nvim_lua = true;
+local cmp = require'cmp'
+cmp.setup {
+    mapping = {
+        ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+        ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+        ['<C-Space>'] = cmp.mapping.complete(),
+        ['<C-e>'] = cmp.mapping.close(),
     };
+
+    sources = cmp.config.sources(
+        {
+            { name = 'nvim_lsp' }
+        },
+        {
+            { name = 'buffer' }
+        }
+    );
 }
 
-require('rust-tools').setup()
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+require'lspconfig'.phpactor.setup{ on_attach = on_attach, capabilities = capabilities }
+require'lspconfig'.tsserver.setup{ on_attach = on_attach, capabilities = capabilities }
+require'lspconfig'.rust_analyzer.setup{ on_attach = on_attach, capabilities = capabilities }
+
+-- require('rust-tools').setup()
 
 --[[
 require'nvim-treesitter.configs'.setup {
@@ -278,7 +279,7 @@ require'nvim-treesitter.configs'.setup {
     highlight = {
         enable = true,              -- false will disable the whole extension
         -- disable = { },  -- list of language that will be disabled
-        additional_vim_regex_highlighting = false,
+        additional_vim_regex_highlighting = true,
     },
     playground = {
         enable = true,
@@ -389,8 +390,11 @@ function! OpenCssModule()
     endif
 
     if filereadable(l:css_module_path)
-        execute 'vsplit' l:css_module_path
-        wincmd w
+        let l:buf_nr = bufnr(l:css_module_path)
+        if l:buf_nr == -1
+            execute 'vsplit' l:css_module_path
+            wincmd w
+        endif
     endif
 endfunction
 
@@ -562,7 +566,7 @@ endif
 
 " Improve go-to-definition and omnicompletion behavior
 nmap g] <C-w><C-]><C-w>T
-set completeopt=longest,menuone
+set completeopt=menu,longest,menuone,noselect
 
 " I have local .vimrc in ~/.local/.vimrc
 if filereadable(expand("$HOME") . "/.local/.vimrc")
