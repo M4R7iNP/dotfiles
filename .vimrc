@@ -384,18 +384,25 @@ function! OpenClosestJsFile()
 endfunction
 
 function! OpenCssModule()
-    let l:css_module_path = substitute(expand('%'), '\.js$', '.module.css', '')
-    if l:css_module_path == expand('%')
-        return
-    endif
+    let l:css_module_paths = [
+        \ substitute(expand('%'), '\.js$', '.module.css', ''),
+        \ substitute(expand('%'), '\.js$', '.module.scss', ''),
+    \ ]
 
-    if filereadable(l:css_module_path)
-        let l:buf_nr = bufnr(l:css_module_path)
-        if l:buf_nr == -1
-            execute 'vsplit' l:css_module_path
-            wincmd w
+    for l:css_module_path in l:css_module_paths
+        if l:css_module_path == expand('%')
+            continue
         endif
-    endif
+
+        if filereadable(l:css_module_path)
+            let l:buf_nr = bufnr(l:css_module_path)
+            if l:buf_nr == -1
+                execute 'vsplit' l:css_module_path
+                wincmd w
+                break
+            endif
+        endif
+    endfor
 endfunction
 
 function! EnableGraphqlSyntaxHighlighting()
