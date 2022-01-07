@@ -113,6 +113,8 @@ if has('nvim-0.5')
     Plug 'hrsh7th/cmp-nvim-lsp'
     Plug 'hrsh7th/cmp-buffer'
     Plug 'hrsh7th/nvim-cmp'
+    Plug 'dcampos/nvim-snippy'
+    Plug 'dcampos/cmp-snippy'
     Plug 'simrat39/rust-tools.nvim', { 'for': 'rust' }
 elseif has('nvim')
     Plug 'prabirshrestha/vim-lsp'
@@ -121,21 +123,21 @@ elseif has('nvim')
 else
     Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
     Plug 'leafgarland/typescript-vim', { 'for': ['javascript', 'typescript'] }
-    Plug 'w0rp/ale' " lint
 endif
 
-Plug 'othree/html5.vim', { 'for': ['html', 'javascript', 'typescript'] }
-Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'typescript'] }
-Plug 'M4R7iNP/yats.vim', { 'for': ['javascript', 'typescript'] }
-Plug 'mxw/vim-jsx', { 'for': ['javascript', 'typescript'] }
+Plug 'w0rp/ale' " lint
+" Plug 'othree/html5.vim', { 'for': ['html', 'javascript', 'typescript'] }
+" Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'typescript'] }
+" Plug 'M4R7iNP/yats.vim', { 'for': ['javascript', 'typescript'] }
+" Plug 'mxw/vim-jsx', { 'for': ['javascript', 'typescript'] }
 
 " ctrlp search
 if has('nvim-0.5')
     Plug 'nvim-lua/popup.nvim'
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-telescope/telescope.nvim'
-    " Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-    " Plug 'nvim-treesitter/playground'
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    Plug 'nvim-treesitter/playground'
 else
     Plug 'ctrlpvim/ctrlp.vim'
     Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
@@ -201,6 +203,7 @@ let g:neoformat_enabled_scss = ['prettier']
 let g:neoformat_enabled_typescriptreact = ['prettier']
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+let g:ale_disable_lsp = 1
 " let g:ale_linters = {'rust': ['rustc']}
 " let g:ale_linters_ignore = {'typescript': ['tslint', 'tsserver'], 'javascript': ['tslint', 'tsserver']}
 " let g:yats_host_keyword = 0
@@ -238,11 +241,22 @@ end
 
 local cmp = require'cmp'
 cmp.setup {
+    snippet = {
+      expand = function(args)
+        require'snippy'.expand_snippet(args.body)
+      end,
+    },
+
     mapping = {
         ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
         ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
         ['<C-Space>'] = cmp.mapping.complete(),
-        ['<C-e>'] = cmp.mapping.close(),
+        ['<C-e>'] = cmp.mapping.abort(),
+    };
+
+    experimental = {
+      native_menu = true,
+      ghost_text = true,
     };
 
     sources = cmp.config.sources(
@@ -262,7 +276,6 @@ require'lspconfig'.rust_analyzer.setup{ on_attach = on_attach, capabilities = ca
 
 -- require('rust-tools').setup()
 
---[[
 require'nvim-treesitter.configs'.setup {
     ensure_installed = {
         "javascript",
@@ -282,10 +295,9 @@ require'nvim-treesitter.configs'.setup {
         additional_vim_regex_highlighting = true,
     },
     playground = {
-        enable = true,
+        enable = false,
     }
 }
-]]--
 
 -- require'colorizer'.setup{
 --     '*';
@@ -360,6 +372,7 @@ au FileType javascript setlocal foldmethod=expr
 au FileType typescript setlocal foldmethod=expr
 au FileType typescript setlocal foldexpr=nvim_treesitter#foldexpr()
 au Filetype javascript.jsx nested call OpenCssModule()
+au Filetype javascript nested call OpenCssModule()
 au FileType yaml set sw=2
 au Filetype vcl set cindent
 " au FileType javascript setlocal foldmethod=syntax
@@ -572,8 +585,10 @@ if exists("g:loaded_EditorConfig")
 endif
 
 " Improve go-to-definition and omnicompletion behavior
-nmap g] <C-w><C-]><C-w>T
-set completeopt=menu,longest,menuone,noselect
+" nmap g] <C-w><C-]><C-w>T
+" set completeopt=menu,longest,menuone,noselect
+nmap g] <cmd>split \| lua vim.lsp.buf.definition()<CR>
+set completeopt=longest,menuone,noselect
 
 " I have local .vimrc in ~/.local/.vimrc
 if filereadable(expand("$HOME") . "/.local/.vimrc")
