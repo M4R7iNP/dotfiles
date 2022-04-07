@@ -84,7 +84,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-speeddating'
-Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline'
 Plug 'mattn/emmet-vim'
 Plug 'kshenoy/vim-signature'
 Plug 'airblade/vim-gitgutter'
@@ -255,8 +255,12 @@ cmp.setup {
     };
 
     experimental = {
-      native_menu = true,
+      -- native_menu = true,
       ghost_text = true,
+    };
+
+    view = {
+        entries = "native",
     };
 
     sources = cmp.config.sources(
@@ -366,7 +370,8 @@ au Filetype xml setlocal makeprg=generateConfig\ %
 au FileType vim set foldmethod=marker
 " au FileType php setlocal omnifunc=phpcomplete_extended#CompletePHP
 " au FileType php setlocal omnifunc=phpcomplete#CompletePHP
-au Filetype javascript.jsx call EnableGraphqlSyntaxHighlighting()
+" au Filetype javascript call EnableGraphqlSyntaxHighlighting()
+" au Filetype javascript.jsx call EnableGraphqlSyntaxHighlighting()
 au Filetype javascript call EnableSqlSyntaxHighlighting()
 au FileType javascript setlocal foldmethod=expr
 au FileType typescript setlocal foldmethod=expr
@@ -511,7 +516,7 @@ map <silent> <leader>gd :Gdiff<cr>
 map <leader>ge :Gedit<cr>
 map <silent><leader>gr :Gread<cr>
 map <silent><leader>gb :Gblame<cr>
-map <silent><leader>gw :Gbrowse!<cr>
+map <silent><leader>gw :GBrowse!<cr>
 map <leader>wt <C-w><S-t>
 map <leader>t :spl<cr>:term<cr>
 map <leader>l :set list!<cr>
