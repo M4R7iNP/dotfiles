@@ -38,7 +38,7 @@ then
             npm i -g neovim
     elif [ "$ID" == "fedora" ];
     then
-        sudo yum install -y vim \
+        sudo dnf install -y vim \
             curl \
             tmux \
             automake \
@@ -46,13 +46,13 @@ then
 
         read -p "Install neovim? [N|y] " -n 1 -r && echo
         [[ "$REPLY" =~ ^[Yy]$ ]] && \
-            sudo yum install -y neovim && \
+            sudo dnf install -y neovim && \
             pip install --user neovim && \
             npm i -g neovim
 
         read -p "Install logid? [N|y] " -n 1 -r && echo
         [[ "$REPLY" =~ ^[Yy]$ ]] && \
-            sudo yum install -y logid && \
+            sudo dnf install -y logid && \
             sudo ln -sf ~/dotfiles/logid.cfg /etc/logid.cfg &&
             sudo systemctl enable logid &&
             sudo systemctl start logid
@@ -70,19 +70,24 @@ then
     dconf write /org/gnome/desktop/peripherals/mouse/accel-profile \'flat\'
     dconf write /org/gnome/desktop/interface/gtk-enable-primary-paste false
     dconf write /org/gnome/desktop/input-sources/show-all-sources true
-    dconf write /org/gnome/desktop/input-sources/xkb-options "['lv3:ralt_switch', 'grp:alt_shift_toggle']"
+    dconf write /org/gnome/desktop/input-sources/xkb-options "['grp:alt_shift_toggle', 'grp:win_space_toggle']"
     dconf write /org/gnome/desktop/wm/preferences/mouse-button-modifier "'<Alt>'"
     dconf write /org/gnome/desktop/wm/preferences/resize-with-right-button true
     dconf write /org/gnome/desktop/input-sources/sources "[('xkb', 'us'), ('xkb', 'no')]"
 
     # kb shortcuts
-    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/binding "'<Pimary><Alt>t'"
-    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/command 'gnomee-terminal'
+    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/binding "'<Primary><Alt>t'"
+    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/command 'gnome-terminal'
     dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/name 'gnome-terminal'
-    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/binding "'<Super>e'"
-    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/command 'nautilus'
-    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/name 'nautilus'
-    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']"
+    if [ "$ID" == "fedora" ]; then
+        dconf write /org/gnome/settings-daemon/plugins/media-keys/home "['<Super>e']"
+        dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
+    else
+        dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/binding "'<Super>e'"
+        dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/command 'nautilus'
+        dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/name 'nautilus'
+        dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']"
+    fi
 fi
 
 if [ ! -e ~/.vim/bundle ];
