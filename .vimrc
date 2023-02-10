@@ -2,6 +2,7 @@
 " Please modify and redistribute
 
 " General options {{{
+set secure
 syntax on
 set nu
 set nowrap
@@ -121,11 +122,11 @@ elseif has('nvim')
     Plug 'mattn/vim-lsp-settings'
     Plug 'mhartington/nvim-typescript', { 'for': ['javascript', 'typescript'] }
 else
+    Plug 'w0rp/ale' " lint
     Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
     Plug 'leafgarland/typescript-vim', { 'for': ['javascript', 'typescript'] }
 endif
 
-Plug 'w0rp/ale' " lint
 " Plug 'othree/html5.vim', { 'for': ['html', 'javascript', 'typescript'] }
 " Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'typescript'] }
 " Plug 'M4R7iNP/yats.vim', { 'for': ['javascript', 'typescript'] }
@@ -248,10 +249,15 @@ cmp.setup {
     },
 
     mapping = {
+        ['<CR>'] = cmp.mapping.confirm({ select = false }),
         ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
         ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-e>'] = cmp.mapping.abort(),
+        ['<C-Y>'] = cmp.mapping.confirm({ select = true }),
+        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-f>'] = cmp.mapping.scroll_docs(4),
+
     };
 
     experimental = {
@@ -273,7 +279,8 @@ cmp.setup {
     );
 }
 
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+-- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 require'lspconfig'.phpactor.setup{ on_attach = on_attach, capabilities = capabilities }
 require'lspconfig'.tsserver.setup{ on_attach = on_attach, capabilities = capabilities }
 require'lspconfig'.rust_analyzer.setup{ on_attach = on_attach, capabilities = capabilities }
@@ -295,8 +302,8 @@ require'nvim-treesitter.configs'.setup {
     },
     highlight = {
         enable = true,              -- false will disable the whole extension
-        -- disable = { },  -- list of language that will be disabled
-        additional_vim_regex_highlighting = true,
+        disable = { "vim" },  -- list of language that will be disabled
+        additional_vim_regex_highlighting = false,
     },
     playground = {
         enable = false,
@@ -553,7 +560,8 @@ set wildmenu
 set wildignore+=.git
 
 " For tmux
-set lazyredraw
+" DISABLED: seems broken on fedora
+" set lazyredraw
 
 " Hwo 2 witre plz
 cnoreabbrev tbae tabe

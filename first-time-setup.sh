@@ -77,15 +77,15 @@ then
 
     # kb shortcuts
     dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/binding "'<Primary><Alt>t'"
-    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/command 'gnome-terminal'
-    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/name 'gnome-terminal'
+    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/command "'gnome-terminal'"
+    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/name "'Terminal'"
     if [ "$ID" == "fedora" ]; then
         dconf write /org/gnome/settings-daemon/plugins/media-keys/home "['<Super>e']"
         dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
     else
         dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/binding "'<Super>e'"
-        dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/command 'nautilus'
-        dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/name 'nautilus'
+        dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/command "'nautilus'"
+        dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/name "'nautilus'"
         dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']"
     fi
 fi
