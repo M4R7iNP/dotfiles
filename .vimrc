@@ -78,68 +78,87 @@ set laststatus=2
 " }}}
 
 " Plugins {{{
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+call plug#begin(stdpath('data') . '/plugged')
 
-Plugin 'gmarik/Vundle.vim'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-rhubarb'
-Plugin 'tpope/vim-unimpaired'
-Plugin 'tpope/vim-speeddating'
-Plugin 'L9'
-Plugin 'FuzzyFinder'
-Plugin 'bling/vim-airline'
-Plugin 'mattn/emmet-vim'
-Plugin 'ap/vim-css-color'
-Plugin 'vim-ruby/vim-ruby'
-Plugin 'kshenoy/vim-signature'
-Plugin 'terryma/vim-multiple-cursors'
-Plugin 'jakobwesthoff/argumentrewrap'
-Plugin 'godlygeek/tabular'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'ntpeters/vim-better-whitespace'
-Plugin 'majutsushi/tagbar'
-Plugin 'benmills/vimux'
-Plugin 'sbdchd/neoformat' " runs e.g. prettier
-Plugin 'ctrlpvim/ctrlp.vim' " ctrlp search
-Plugin 'w0rp/ale' " lint
-Plugin 'sjl/gundo.vim'
-Plugin 'elixir-editors/vim-elixir'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-speeddating'
+Plug 'vim-airline/vim-airline'
+Plug 'mattn/emmet-vim'
+Plug 'kshenoy/vim-signature'
+Plug 'airblade/vim-gitgutter'
+Plug 'ntpeters/vim-better-whitespace'
+" Plug 'majutsushi/tagbar'
+Plug 'benmills/vimux'
+Plug 'sbdchd/neoformat' " runs e.g. prettier
+Plug 'sjl/gundo.vim'
 
 " language specific plugins
-Plugin 'othree/html5.vim'
-" Plugin 'orourkek/vim-less'
-" Plugin 'groenewege/vim-less'
-Plugin 'pangloss/vim-javascript'
-Plugin 'mxw/vim-jsx'
-" Plugin 'leafgarland/typescript-vim'
-Plugin 'M4R7iNP/yats.vim'
-Plugin 'mhartington/nvim-typescript'
-" Plugin 'peitalin/vim-jsx-typescript'
-Plugin 'simeng/vim-imba'
-Plugin 'M4R7iNP/smarty.vim'
-Plugin 'M4R7iNP/vim-inky'
-Plugin 'M4R7iNP/vim-nginx'
-Plugin 'Glench/Vim-Jinja2-Syntax'
-Plugin 'digitaltoad/vim-pug'
-Plugin 'Shougo/neco-vim'
-Plugin 'Shougo/neco-syntax'
-Plugin 'jparise/vim-graphql'
-Plugin 'derekwyatt/vim-scala'
-Plugin 'slim-template/vim-slim'
-Plugin 'wokalski/autocomplete-flow'
-Plugin 'fgsch/vim-varnish'
-Plugin 'jwalton512/vim-blade'
-Plugin 'shawncplus/phpcomplete.vim'
-Plugin 'rust-lang/rust.vim'
-Plugin 'GutenYe/json5.vim'
+Plug 'simeng/vim-imba', { 'for': 'imba' }
+Plug 'M4R7iNP/smarty.vim', { 'for': 'smarty' }
+Plug 'M4R7iNP/vim-inky', { 'for': 'inky' }
+Plug 'M4R7iNP/vim-nginx', { 'for': 'nginx' }
+Plug 'Glench/Vim-Jinja2-Syntax', { 'for': 'jinja' }
+Plug 'digitaltoad/vim-pug', { 'for': 'pug' }
+Plug 'jparise/vim-graphql'
+Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
+Plug 'slim-template/vim-slim', { 'for': 'slim' }
+Plug 'fgsch/vim-varnish', { 'for': 'vcl' }
+Plug 'jwalton512/vim-blade', { 'for': 'php' }
+Plug 'GutenYe/json5.vim', { 'for': ['json', 'json5'] }
+
+if has('nvim-0.5')
+    Plug 'neovim/nvim-lspconfig'
+    Plug 'hrsh7th/cmp-nvim-lsp'
+    Plug 'hrsh7th/cmp-buffer'
+    Plug 'hrsh7th/nvim-cmp'
+    Plug 'dcampos/nvim-snippy'
+    Plug 'dcampos/cmp-snippy'
+    Plug 'simrat39/rust-tools.nvim', { 'for': 'rust' }
+elseif has('nvim')
+    Plug 'prabirshrestha/vim-lsp'
+    Plug 'mattn/vim-lsp-settings'
+    Plug 'mhartington/nvim-typescript', { 'for': ['javascript', 'typescript'] }
+else
+    Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
+    Plug 'leafgarland/typescript-vim', { 'for': ['javascript', 'typescript'] }
+endif
+
+Plug 'w0rp/ale' " lint
+" Plug 'othree/html5.vim', { 'for': ['html', 'javascript', 'typescript'] }
+" Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'typescript'] }
+" Plug 'M4R7iNP/yats.vim', { 'for': ['javascript', 'typescript'] }
+" Plug 'mxw/vim-jsx', { 'for': ['javascript', 'typescript'] }
+
+" ctrlp search
+if has('nvim-0.5')
+    Plug 'nvim-lua/popup.nvim'
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'nvim-telescope/telescope.nvim'
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    Plug 'nvim-treesitter/playground'
+else
+    Plug 'ctrlpvim/ctrlp.vim'
+    Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
+    Plug 'elixir-editors/vim-elixir', { 'for': 'elixir' }
+    Plug 'rust-lang/rust.vim', { 'for': 'rust' }
+endif
+
+if has ('nvim')
+    Plug 'tjdevries/colorbuddy.vim'
+    Plug 'tjdevries/gruvbuddy.nvim'
+    " Plug 'Th3Whit3Wolf/spacebuddy'
+    " Plug 'marko-cerovac/material.nvim'
+    " Plug 'norcalli/nvim-colorizer.lua'
+endif
 
 if has('python') || has('python3')
-    Plugin 'editorconfig/editorconfig-vim'
+    Plug 'editorconfig/editorconfig-vim'
 endif
 
 if has('nvim') || v:version >= 800
-    Plugin 'ludovicchabant/vim-gutentags'
+    " Plug 'ludovicchabant/vim-gutentags'
 end
 
 if has('nvim')
@@ -148,29 +167,24 @@ if has('nvim')
     " let g:neomake_javascript_enabled_makers = ['eslint']
     " let g:neomake_jsx_enabled_makers = ['eslint']
 
+    " Plug 'neoclide/coc.nvim', {'branch': 'release'}
     if has('python3')
         " Use deoplete
-        Plugin 'Shougo/deoplete.nvim'
-        let g:deoplete#enable_at_startup = 1
-        " let g:deoplete#auto_complete_start_length = 1
-        " let g:deoplete#enable_smart_case = 1
-        let g:deoplete#tag#cache_limit_size = 5000000
-        let g:deoplete#omni_patterns = {
-            \ 'javascript': '[^. *\t]\.\w*',
-            \ 'php': '\h\w*\|[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?',
-        \ }
+        " Plug 'Shougo/deoplete.nvim'
+        " let g:deoplete#enable_at_startup = 1
+        " let g:deoplete#tag#cache_limit_size = 5000000
         let g:echodoc#enable_at_startup = 1
         let g:echodoc#type = 'virtual'
 
-        Plugin 'Shougo/echodoc.vim'
-        Plugin 'Shougo/denite.nvim'
+        " Plug 'Shougo/echodoc.vim'
+        " Plug 'Shougo/denite.nvim'
     endif
 else
-    Plugin 'scrooloose/syntastic'
-    Plugin 'jaxbot/syntastic-react'
+    Plug 'scrooloose/syntastic'
+    Plug 'jaxbot/syntastic-react'
 end
 
-call vundle#end()
+call plug#end()
 filetype plugin indent on
 
 "}}}
@@ -189,6 +203,8 @@ let g:neoformat_enabled_scss = ['prettier']
 let g:neoformat_enabled_typescriptreact = ['prettier']
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+let g:ale_disable_lsp = 1
+" let g:ale_linters = {'rust': ['rustc']}
 " let g:ale_linters_ignore = {'typescript': ['tslint', 'tsserver'], 'javascript': ['tslint', 'tsserver']}
 " let g:yats_host_keyword = 0
 let php_sql_query = 1
@@ -208,6 +224,99 @@ if exists("*deoplete#custom#option")
         \ }
     \ })
 endif
+
+let g:lsp_diagnostics_virtual_text_prefix = ' '
+let g:lsp_preview_doubletap = 0
+let g:lsp_preview_float = 0
+let g:lsp_preview_float = 0
+
+if has('nvim-0.5')
+lua << END
+
+require('telescope').setup{}
+
+local on_attach = function(client, bufnr)
+    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+end
+
+local cmp = require'cmp'
+cmp.setup {
+    snippet = {
+      expand = function(args)
+        require'snippy'.expand_snippet(args.body)
+      end,
+    },
+
+    mapping = {
+        ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+        ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+        ['<C-Space>'] = cmp.mapping.complete(),
+        ['<C-e>'] = cmp.mapping.abort(),
+    };
+
+    experimental = {
+      -- native_menu = true,
+      ghost_text = true,
+    };
+
+    view = {
+        entries = "native",
+    };
+
+    sources = cmp.config.sources(
+        {
+            { name = 'nvim_lsp' }
+        },
+        {
+            { name = 'buffer' }
+        }
+    );
+}
+
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+require'lspconfig'.phpactor.setup{ on_attach = on_attach, capabilities = capabilities }
+require'lspconfig'.tsserver.setup{ on_attach = on_attach, capabilities = capabilities }
+require'lspconfig'.rust_analyzer.setup{ on_attach = on_attach, capabilities = capabilities }
+
+-- require('rust-tools').setup()
+
+require'nvim-treesitter.configs'.setup {
+    ensure_installed = {
+        "javascript",
+        "typescript",
+        "json",
+        "html",
+        "php",
+        "rust",
+        "lua",
+    },
+    indent = {
+        enable = true
+    },
+    highlight = {
+        enable = true,              -- false will disable the whole extension
+        -- disable = { },  -- list of language that will be disabled
+        additional_vim_regex_highlighting = true,
+    },
+    playground = {
+        enable = false,
+    }
+}
+
+-- require'colorizer'.setup{
+--     '*';
+-- }
+
+END
+elseif has('nvim')
+    set omnifunc=lsp#complete
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+endif
+
+if has('nvim-0.5')
+    nnoremap <C-p> <cmd>Telescope git_files<cr>
+endif
+
 " }}}
 
 " Emmet options {{{
@@ -250,25 +359,28 @@ let g:user_emmet_settings = {
 " Autocmds {{{
 au BufWinEnter /etc/nginx/*.conf setfiletype nginx
 au BufWinEnter ~/nginx-config/sites-*/* setfiletype nginx
-au BufWinEnter /etc/varnish/*.vcl setfiletype conf
 au FileType gitcommit,html,smarty,eruby,slim,po setlocal spell
 au BufWinEnter /etc/cron.d/* set noexpandtab
 au BufWinEnter .eslintrc set ft=json
 au BufNewFile,BufRead *.prisma set ft=graphql
-au BufNewFile,BufRead *.vcl set cindent
 au BufNewFile *.php :Emmet phphead
 au BufNewFile lib/modules/*.php :Emmet aethermodule
 au BufNewFile * nested call OpenClosestJsFile()
 au Filetype xml setlocal makeprg=generateConfig\ %
 au FileType vim set foldmethod=marker
 " au FileType php setlocal omnifunc=phpcomplete_extended#CompletePHP
-au FileType php setlocal omnifunc=phpcomplete#CompletePHP
-au Filetype javascript.jsx call EnableGraphqlSyntaxHighlighting()
+" au FileType php setlocal omnifunc=phpcomplete#CompletePHP
+" au Filetype javascript call EnableGraphqlSyntaxHighlighting()
+" au Filetype javascript.jsx call EnableGraphqlSyntaxHighlighting()
 au Filetype javascript call EnableSqlSyntaxHighlighting()
-au FileType javascript setlocal foldmethod=syntax
-au FileType typescript setlocal foldmethod=syntax
+au FileType javascript setlocal foldmethod=expr
+au FileType typescript setlocal foldmethod=expr
+au FileType typescript setlocal foldexpr=nvim_treesitter#foldexpr()
 au Filetype javascript.jsx nested call OpenCssModule()
+au Filetype javascript nested call OpenCssModule()
 au FileType yaml set sw=2
+au Filetype vcl set cindent
+" au FileType javascript setlocal foldmethod=syntax
 "}}}
 
 " Functions {{{
@@ -290,15 +402,25 @@ function! OpenClosestJsFile()
 endfunction
 
 function! OpenCssModule()
-    let l:css_module_path = substitute(expand('%'), '\.js$', '.module.css', '')
-    if l:css_module_path == expand('%')
-        return
-    endif
+    let l:css_module_paths = [
+        \ substitute(expand('%'), '\.js$', '.module.css', ''),
+        \ substitute(expand('%'), '\.js$', '.module.scss', ''),
+    \ ]
 
-    if filereadable(l:css_module_path)
-        execute 'vsplit' l:css_module_path
-        wincmd w
-    endif
+    for l:css_module_path in l:css_module_paths
+        if l:css_module_path == expand('%')
+            continue
+        endif
+
+        if filereadable(l:css_module_path)
+            let l:buf_nr = bufnr(l:css_module_path)
+            if l:buf_nr == -1
+                execute 'vsplit' l:css_module_path
+                wincmd w
+                break
+            endif
+        endif
+    endfor
 endfunction
 
 function! EnableGraphqlSyntaxHighlighting()
@@ -372,6 +494,7 @@ imap <S-Right> <Right>
 " Switch tabs using Ctrl left/right
 nnoremap <C-L> gt
 nnoremap <C-H> gT
+nnoremap <Space> :TSHighlightCapturesUnderCursor<CR>
 
 " Disable annoying letters
 nnoremap Q <nop>
@@ -393,7 +516,7 @@ map <silent> <leader>gd :Gdiff<cr>
 map <leader>ge :Gedit<cr>
 map <silent><leader>gr :Gread<cr>
 map <silent><leader>gb :Gblame<cr>
-map <silent><leader>gw :Gbrowse!<cr>
+map <silent><leader>gw :GBrowse!<cr>
 map <leader>wt <C-w><S-t>
 map <leader>t :spl<cr>:term<cr>
 map <leader>l :set list!<cr>
@@ -467,8 +590,10 @@ if exists("g:loaded_EditorConfig")
 endif
 
 " Improve go-to-definition and omnicompletion behavior
-nmap g] <C-w><C-]><C-w>T
-set completeopt=longest,menuone
+" nmap g] <C-w><C-]><C-w>T
+" set completeopt=menu,longest,menuone,noselect
+nmap g] <cmd>split \| lua vim.lsp.buf.definition()<CR>
+set completeopt=longest,menuone,noselect
 
 " I have local .vimrc in ~/.local/.vimrc
 if filereadable(expand("$HOME") . "/.local/.vimrc")
