@@ -24,6 +24,7 @@ set splitbelow
 set splitright
 set undolevels=1000
 set undoreload=10000
+set secure
 if exists('&signcolumn')
     set signcolumn=yes
 endif
@@ -86,14 +87,14 @@ Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-speeddating'
 Plug 'vim-airline/vim-airline'
-Plug 'mattn/emmet-vim'
+" Plug 'mattn/emmet-vim'
 Plug 'kshenoy/vim-signature'
 Plug 'airblade/vim-gitgutter'
 Plug 'ntpeters/vim-better-whitespace'
-" Plug 'majutsushi/tagbar'
 Plug 'benmills/vimux'
 Plug 'sbdchd/neoformat' " runs e.g. prettier
 Plug 'sjl/gundo.vim'
+Plug 'vimwiki/vimwiki'
 
 " language specific plugins
 Plug 'simeng/vim-imba', { 'for': 'imba' }
@@ -108,6 +109,7 @@ Plug 'slim-template/vim-slim', { 'for': 'slim' }
 Plug 'fgsch/vim-varnish', { 'for': 'vcl' }
 Plug 'jwalton512/vim-blade', { 'for': 'php' }
 Plug 'GutenYe/json5.vim', { 'for': ['json', 'json5'] }
+Plug 'tpope/vim-markdown', { 'for': ['markdown'] }
 
 if has('nvim-0.5')
     Plug 'neovim/nvim-lspconfig'
@@ -117,6 +119,8 @@ if has('nvim-0.5')
     Plug 'dcampos/nvim-snippy'
     Plug 'dcampos/cmp-snippy'
     Plug 'simrat39/rust-tools.nvim', { 'for': 'rust' }
+    Plug 'honza/vim-snippets'
+    Plug 'onsails/lspkind-nvim'
 elseif has('nvim')
     Plug 'prabirshrestha/vim-lsp'
     Plug 'mattn/vim-lsp-settings'
@@ -146,44 +150,9 @@ else
     Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 endif
 
-if has ('nvim')
-    Plug 'tjdevries/colorbuddy.vim'
-    Plug 'tjdevries/gruvbuddy.nvim'
-    " Plug 'Th3Whit3Wolf/spacebuddy'
-    " Plug 'marko-cerovac/material.nvim'
-    " Plug 'norcalli/nvim-colorizer.lua'
-endif
-
 if has('python') || has('python3')
     Plug 'editorconfig/editorconfig-vim'
 endif
-
-if has('nvim') || v:version >= 800
-    " Plug 'ludovicchabant/vim-gutentags'
-end
-
-if has('nvim')
-    " Plugin 'benekastah/neomake'
-    " autocmd! BufWritePost * Neomake
-    " let g:neomake_javascript_enabled_makers = ['eslint']
-    " let g:neomake_jsx_enabled_makers = ['eslint']
-
-    " Plug 'neoclide/coc.nvim', {'branch': 'release'}
-    if has('python3')
-        " Use deoplete
-        " Plug 'Shougo/deoplete.nvim'
-        " let g:deoplete#enable_at_startup = 1
-        " let g:deoplete#tag#cache_limit_size = 5000000
-        let g:echodoc#enable_at_startup = 1
-        let g:echodoc#type = 'virtual'
-
-        " Plug 'Shougo/echodoc.vim'
-        " Plug 'Shougo/denite.nvim'
-    endif
-else
-    Plug 'scrooloose/syntastic'
-    Plug 'jaxbot/syntastic-react'
-end
 
 call plug#end()
 filetype plugin indent on
@@ -196,6 +165,7 @@ let g:user_emmet_expandabbr_key = '<C-Z>'
 let g:user_emmet_complete_tag = 1
 let g:smarty_conceal_translated_strings = 1
 let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
 let g:javascript_enable_domhtmlcss = 1
 let g:javascript_plugin_flow = 1
 let g:multi_cursor_quit_key = '<Tab>'
@@ -204,13 +174,16 @@ let g:neoformat_enabled_scss = ['prettier']
 let g:neoformat_enabled_typescriptreact = ['prettier']
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
-let g:ale_disable_lsp = 1
+" let g:ale_disable_lsp = 1
 " let g:ale_linters = {'rust': ['rustc']}
 " let g:ale_linters_ignore = {'typescript': ['tslint', 'tsserver'], 'javascript': ['tslint', 'tsserver']}
 " let g:yats_host_keyword = 0
 let php_sql_query = 1
 let g:sql_type_default = 'postgresql'
 let php_folding = 1
+let g:vimwiki_list = [{'path': '~/.wiki', 'syntax': 'markdown', 'ext': '.md'}]
+let g:vimwiki_conceal_pre = 1
+let g:vimwiki_key_mappings = { 'table_mappings': 0 }
 let g:gutentags_ctags_extra_args = ['--output-format=e-ctags', '--options=' . $HOME . '/dotfiles/.ctags']
 let g:echodoc#enable_at_startup = 1
 let g:echodoc#type = 'virtual'
@@ -232,7 +205,7 @@ let g:lsp_preview_float = 0
 let g:lsp_preview_float = 0
 
 if has('nvim-0.5')
-lua << END
+lua << LUA_END
 
 require('telescope').setup{}
 
@@ -314,7 +287,7 @@ require'nvim-treesitter.configs'.setup {
 --     '*';
 -- }
 
-END
+LUA_END
 elseif has('nvim')
     set omnifunc=lsp#complete
     if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
