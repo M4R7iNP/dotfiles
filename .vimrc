@@ -143,6 +143,9 @@ if has('nvim-0.5')
     Plug 'nvim-telescope/telescope.nvim'
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
     Plug 'nvim-treesitter/playground'
+
+    hi @text.diff.add ctermfg=Green
+    hi @text.diff.delete ctermfg=Red
 else
     Plug 'ctrlpvim/ctrlp.vim'
     Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
