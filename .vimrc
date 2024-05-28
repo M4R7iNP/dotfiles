@@ -79,6 +79,18 @@ set t_Co=256
 set laststatus=2
 " }}}
 
+if has('nvim-0.10')
+    colorscheme vim
+    set notermguicolors
+endif
+
+" Automatic vim-plug install
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 " Plugins {{{
 call plug#begin(stdpath('data') . '/plugged')
 
@@ -363,6 +375,9 @@ au Filetype javascript.jsx nested call OpenCssModule()
 au Filetype javascript nested call OpenCssModule()
 au FileType yaml set sw=2
 au Filetype vcl set cindent
+au Filetype rust noremap <buffer> <leader>f :lua vim.lsp.buf.format()<CR>
+au Filetype svelte noremap <buffer> <leader>f :lua vim.lsp.buf.format()<CR>
+au BufNewFile,BufRead .env* :Copilot disable
 " au FileType javascript setlocal foldmethod=syntax
 "}}}
 
@@ -512,6 +527,7 @@ map <leader>s :split <C-R>=expand("%:h") . "/" <CR>
 map <leader>v :vsp <C-R>=expand("%:h") . "/" <CR>
 noremap <leader>f :Neoformat<CR>
 noremap <leader>minify :'<,'>!terser -m<CR>
+noremap <leader>x :lua vim.lsp.buf.code_action()<CR>
 
 " Nvim's terminal
 if has('nvim')
