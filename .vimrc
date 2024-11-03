@@ -85,7 +85,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-speeddating'
-Plug 'vim-airline/vim-airline'
 Plug 'mattn/emmet-vim'
 Plug 'kshenoy/vim-signature'
 Plug 'airblade/vim-gitgutter'
@@ -93,7 +92,7 @@ Plug 'ntpeters/vim-better-whitespace'
 " Plug 'majutsushi/tagbar'
 Plug 'benmills/vimux'
 Plug 'sbdchd/neoformat' " runs e.g. prettier
-Plug 'sjl/gundo.vim'
+" Plug 'sjl/gundo.vim'
 
 " language specific plugins
 Plug 'simeng/vim-imba', { 'for': 'imba' }
@@ -105,9 +104,10 @@ Plug 'digitaltoad/vim-pug', { 'for': 'pug' }
 Plug 'jparise/vim-graphql'
 Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
 Plug 'slim-template/vim-slim', { 'for': 'slim' }
-Plug 'fgsch/vim-varnish', { 'for': 'vcl' }
+" Plug 'fgsch/vim-varnish', { 'for': 'vcl' }
 Plug 'jwalton512/vim-blade', { 'for': 'php' }
 Plug 'GutenYe/json5.vim', { 'for': ['json', 'json5'] }
+Plug 'pest-parser/pest.vim', { 'for': 'pest' }
 
 if has('nvim-0.5')
     Plug 'neovim/nvim-lspconfig'
@@ -134,12 +134,43 @@ endif
 
 " ctrlp search
 if has('nvim-0.5')
+    Plug 'nvim-lualine/lualine.nvim'
+    Plug 'nvim-tree/nvim-web-devicons'
     Plug 'nvim-lua/popup.nvim'
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-telescope/telescope.nvim'
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
     Plug 'nvim-treesitter/playground'
+    hi Identifier ctermfg=LightGray cterm=NONE
+    hi link @parameter Special
+    " hi @variable ctermfg=LightGray
+    " hi @property ctermfg=LightGray
+    " hi @parameter ctermfg=LightGray
+    " hi @function.call ctermfg=LightGray
+    hi link @function.builtin Statement
+    hi link @variable.builtin Type
+    hi @tag.delimiter.html ctermfg=Cyan
+    hi link @tag.delimiter.html Identifier
+    hi link @tag.html Statement
+    " Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
+    Plug 'j-hui/fidget.nvim'
+
+    hi @text.diff.add ctermfg=Green
+    hi @text.diff.delete ctermfg=Red
+    hi diffAdded ctermfg=Green
+    hi diffRemoved ctermfg=Red
+
+    hi link @lsp.type.keyword Keyword
+    hi link @lsp.type.operator Operator
+    hi link @lsp.type.string String
+    hi link @lsp.type.number String
+    " hi link @lsp.typemod.function.defaultLibrary.vcl Keyword
+
+    " hi clear @lsp.type.string.vcl
+    " hi @lsp.type.string.vcl ctermbg=none
+    " lua vim.highlight.priorities.semantic_tokens = 0
 else
+    Plug 'vim-airline/vim-airline'
     Plug 'ctrlpvim/ctrlp.vim'
     Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
     Plug 'elixir-editors/vim-elixir', { 'for': 'elixir' }
@@ -234,10 +265,27 @@ let g:lsp_preview_float = 0
 if has('nvim-0.5')
 lua << END
 
-require('telescope').setup{}
+require'lualine'.setup{
+    options = {
+        theme = 'powerline',
+    },
+    tabline = {
+        lualine_a = {
+            {
+                'tabs',
+                mode = 2,
+                max_length = vim.o.columns
+            }
+        },
+    }
+}
+require'telescope'.setup{}
+require'fidget'.setup{}
 
 local on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+    -- vim.api.nvim_set_hl(bufnr, "@lsp.type.regexp.vcl", {})
+    -- vim.api.nvim_set_hl(bufnr, "@lsp.type.string.vcl", { ctermfg = "Green", fg = "Green" })
 end
 
 local cmp = require'cmp'
@@ -260,11 +308,6 @@ cmp.setup {
 
     };
 
-    experimental = {
-      -- native_menu = true,
-      ghost_text = true,
-    };
-
     view = {
         entries = "native",
     };
@@ -272,22 +315,55 @@ cmp.setup {
     sources = cmp.config.sources(
         {
             { name = 'nvim_lsp' }
-        },
-        {
-            { name = 'buffer' }
         }
+--         {
+--             { name = 'buffer' }
+--         }
     );
 }
 
--- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local lspconfig = require'lspconfig'
+local lsp_configs = require'lspconfig.configs'
+
+-- local cmd = vim.lsp.rpc.connect("::1", 9009)
+
+lsp_configs.varnishls = {
+  default_config = {
+    -- Update the path to vcl-lsp
+    -- cmd = { "/home/martin/varnishls/target/debug/varnishls", "lsp", "--stdio", "--debug" },
+    -- cmd = { "/home/martin/varnishls/target/release/varnishls", "lsp", "--stdio", "--debug" },
+    cmd = {
+        "cargo",
+        "run",
+        -- "--release",
+        "--manifest-path",
+        "/home/martin/varnishls/Cargo.toml",
+        "lsp",
+        "--stdio",
+        "--debug",
+    },
+    -- cmd = cmd,
+    filetypes = { "vcl", "vtc" },
+    root_dir = lspconfig.util.root_pattern(".varnishls.toml", ".git"),
+    -- root_dir = lspconfig.util.root_pattern(".git"),
+    settings = {},
+  }
+}
+
+
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 require'lspconfig'.phpactor.setup{ on_attach = on_attach, capabilities = capabilities }
-require'lspconfig'.tsserver.setup{ on_attach = on_attach, capabilities = capabilities }
+require'lspconfig'.ts_ls.setup{ on_attach = on_attach, capabilities = capabilities }
 require'lspconfig'.rust_analyzer.setup{ on_attach = on_attach, capabilities = capabilities }
+require'lspconfig'.clangd.setup{ on_attach = on_attach, capabilities = capabilities }
+require'lspconfig'.varnishls.setup{ on_attach = on_attach, capabilities = capabilities }
+require'lspconfig'.vimls.setup{ on_attach = on_attach, capabilities = capabilities }
+require'lspconfig'.zls.setup{ on_attach = on_attach, capabilities = capabilities }
 
 -- require('rust-tools').setup()
 
 require'nvim-treesitter.configs'.setup {
+    auto_install = false,
     ensure_installed = {
         "javascript",
         "typescript",
@@ -298,21 +374,35 @@ require'nvim-treesitter.configs'.setup {
         "lua",
     },
     indent = {
-        enable = true
+        enable = true,
+        disable = { "vcl" },
     },
     highlight = {
         enable = true,              -- false will disable the whole extension
-        disable = { "vim" },  -- list of language that will be disabled
-        additional_vim_regex_highlighting = false,
+        -- enable = false,              -- false will disable the whole extension
+        -- disable = { "gitcommit", },  -- list of language that will be disabled
+        disable = { "gitcommit", "diff", "vcl", "vtc", },  -- list of language that will be disabled
+        additional_vim_regex_highlighting = { "html" },
     },
     playground = {
-        enable = false,
+        enable = true,
+    },
+    incremental_selection = {
+        enable = true,
     }
 }
 
--- require'colorizer'.setup{
---     '*';
--- }
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+for _, lang in pairs({ "vcl", "vtc" }) do
+  parser_config[lang] = {
+    install_info = {
+      url = "/home/martin/varnishls/vendor/tree-sitter-" .. lang,
+      files = {"src/parser.c"},
+    }
+  }
+end
+
+vim.filetype.add({ extension = { vcl = 'vcl', vtc = 'vtc' } })
 
 END
 elseif has('nvim')
@@ -383,10 +473,24 @@ au Filetype javascript call EnableSqlSyntaxHighlighting()
 au FileType javascript setlocal foldmethod=expr
 au FileType typescript setlocal foldmethod=expr
 au FileType typescript setlocal foldexpr=nvim_treesitter#foldexpr()
+au FileType rust setlocal foldexpr=nvim_treesitter#foldexpr()
+au FileType rust setlocal foldmethod=expr
 au Filetype javascript.jsx nested call OpenCssModule()
 au Filetype javascript nested call OpenCssModule()
 au FileType yaml set sw=2
-au Filetype vcl set cindent
+" au Filetype vcl set cindent
+au Filetype vcl set autoindent
+au Filetype vcl lua vim.lsp.set_log_level("INFO")
+au Filetype vcl inoremap <buffer> <C-x><C-o> <Cmd>lua require('cmp').complete()<CR>
+au Filetype vcl nnoremap <CR> :LspRestart<CR>
+au Filetype vtc nnoremap <CR> :LspRestart<CR>
+au Filetype vcl set foldmethod=expr
+au Filetype vcl set foldexpr=nvim_treesitter#foldexpr()
+au Filetype vcl set nofoldenable " Disable folding at startup.
+
+au Filetype rust nmap <buffer> <leader>f :lua vim.lsp.buf.format()<CR>
+au Filetype svelte nmap <buffer> <leader>f :lua vim.lsp.buf.format()<CR>
+au Filetype vcl nmap <buffer> <leader>f :lua vim.lsp.buf.format()<CR>
 " au FileType javascript setlocal foldmethod=syntax
 "}}}
 
@@ -535,7 +639,9 @@ map <leader>t :tabe <C-R>=expand("%:h") . "/" <CR>
 map <leader>s :split <C-R>=expand("%:h") . "/" <CR>
 map <leader>v :vsp <C-R>=expand("%:h") . "/" <CR>
 noremap <leader>f :Neoformat<CR>
-noremap <leader>minify :'<,'>!terser -m<CR>
+" noremap <leader>f :lua vim.lsp.buf.format()<CR>
+noremap <leader>minify :'<,'>!terser -m --module --toplevel<CR>
+noremap <leader>r <cmd>set relativenumber!<CR>
 
 " Nvim's terminal
 if has('nvim')
@@ -600,7 +706,8 @@ endif
 " Improve go-to-definition and omnicompletion behavior
 " nmap g] <C-w><C-]><C-w>T
 " set completeopt=menu,longest,menuone,noselect
-nmap g] <cmd>split \| lua vim.lsp.buf.definition()<CR>
+" nmap g] <cmd>split \| lua vim.lsp.buf.definition()<CR>
+nmap g] <cmd>lua vim.lsp.buf.definition()<CR>
 set completeopt=longest,menuone,noselect
 
 " I have local .vimrc in ~/.local/.vimrc
