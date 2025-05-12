@@ -113,26 +113,9 @@ mkdir -p \
 ln -sf ~/.vim ~/.config/nvim
 ln -sf ~/dotfiles/terminator.config ~/.config/terminator/config
 
+ln -s ~/dotfiles/.vimrc .config/nvim/init.vim
+
 # Install vim plugins
 vim +PlugInstall +qall
-
-NPM_PACKAGES=(
-eslint
-prettier
-)
-
-# if npm is installed
-NPM=$(command -v npm)
-if [ -x $NPM ];
-then
-    if ! grep -q "^prefix" ~/.npmrc;
-    then
-        echo "prefix=/home/martin/.local" >> ~/.npmrc
-    fi
-
-    echo "Installing ${NPM_PACKAGES[@]}"
-
-    $NPM install -g ${NPM_PACKAGES[@]}
-fi
 
 source ~/.bashrc

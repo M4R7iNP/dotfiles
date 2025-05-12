@@ -98,8 +98,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-speeddating'
-Plug 'vim-airline/vim-airline'
-" Plug 'mattn/emmet-vim'
+Plug 'mattn/emmet-vim'
 Plug 'kshenoy/vim-signature'
 Plug 'airblade/vim-gitgutter'
 Plug 'ntpeters/vim-better-whitespace'
@@ -115,13 +114,16 @@ Plug 'M4R7iNP/vim-inky', { 'for': 'inky' }
 Plug 'M4R7iNP/vim-nginx', { 'for': 'nginx' }
 Plug 'Glench/Vim-Jinja2-Syntax', { 'for': 'jinja' }
 Plug 'digitaltoad/vim-pug', { 'for': 'pug' }
-Plug 'jparise/vim-graphql'
+" Plug 'jparise/vim-graphql'
 Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
 Plug 'slim-template/vim-slim', { 'for': 'slim' }
 Plug 'fgsch/vim-varnish', { 'for': 'vcl' }
 Plug 'jwalton512/vim-blade', { 'for': 'php' }
 Plug 'GutenYe/json5.vim', { 'for': ['json', 'json5'] }
 Plug 'tpope/vim-markdown', { 'for': ['markdown'] }
+" Plug 'instant-markdown/vim-instant-markdown', {'for': 'markdown', 'do': 'yarn install'}
+let g:copilot_no_tab_map = v:true
+Plug 'github/copilot.vim'
 
 if has('nvim-0.5')
     Plug 'neovim/nvim-lspconfig'
@@ -150,15 +152,34 @@ endif
 
 " ctrlp search
 if has('nvim-0.5')
+    Plug 'nvim-lualine/lualine.nvim'
+    Plug 'nvim-tree/nvim-web-devicons'
     Plug 'nvim-lua/popup.nvim'
     Plug 'nvim-lua/plenary.nvim'
+    Plug 'CopilotC-Nvim/CopilotChat.nvim'
+    Plug 'j-hui/fidget.nvim'
     Plug 'nvim-telescope/telescope.nvim'
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
     Plug 'nvim-treesitter/playground'
+    hi Identifier ctermfg=LightGray cterm=NONE
+    hi link @parameter Special
+    " hi @variable ctermfg=LightGray
+    " hi @property ctermfg=LightGray
+    " hi @parameter ctermfg=LightGray
+    " hi @function.call ctermfg=LightGray
+    hi link @function.builtin Statement
+    hi link @variable.builtin Type
+    hi @tag.delimiter.html ctermfg=Cyan
+    hi link @tag.delimiter.html Identifier
+    hi link @tag.html Statement
+    " hi link @type.builtin.javascript Statement
 
     hi @text.diff.add ctermfg=Green
     hi @text.diff.delete ctermfg=Red
+    hi @diff.plus ctermfg=Green
+    hi @diff.minus ctermfg=Red
 else
+    Plug 'vim-airline/vim-airline'
     Plug 'ctrlpvim/ctrlp.vim'
     Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
     Plug 'elixir-editors/vim-elixir', { 'for': 'elixir' }
@@ -166,7 +187,7 @@ else
 endif
 
 if has('python') || has('python3')
-    Plug 'editorconfig/editorconfig-vim'
+    " Plug 'editorconfig/editorconfig-vim'
 endif
 
 call plug#end()
@@ -176,7 +197,7 @@ filetype plugin indent on
 
 " Plugin options {{{
 let g:mta_filetypes = { 'html' : 1, 'xhtml' : 1, 'xml' : 1, 'jinja' : 1, 'smarty': 1 }
-let g:user_emmet_expandabbr_key = '<C-Z>'
+let g:user_emmet_expandabbr_key = '<C-Y>'
 let g:user_emmet_complete_tag = 1
 let g:smarty_conceal_translated_strings = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -187,6 +208,7 @@ let g:multi_cursor_quit_key = '<Tab>'
 let g:neoformat_try_formatprg = 1
 let g:neoformat_enabled_scss = ['prettier']
 let g:neoformat_enabled_typescriptreact = ['prettier']
+let g:neoformat_enabled_javascriptreact = ['prettier']
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
 " let g:ale_disable_lsp = 1
@@ -203,6 +225,16 @@ let g:gutentags_ctags_extra_args = ['--output-format=e-ctags', '--options=' . $H
 let g:echodoc#enable_at_startup = 1
 let g:echodoc#type = 'virtual'
 highlight link EchoDocFloat Pmenu
+let g:instant_markdown_open_to_the_world = 0
+" let g:instant_markdown_port = 888e
+imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
+let g:copilot_no_tab_map = v:true
+let g:copilot_no_maps = v:true
+let g:copilot_filetypes = {
+\ 'env': v:false,
+\ }
+
+
 let g:deoplete#enable_at_startup = 1
 if exists("*deoplete#custom#option")
     call deoplete#custom#option({
@@ -219,8 +251,35 @@ let g:lsp_preview_doubletap = 0
 let g:lsp_preview_float = 0
 let g:lsp_preview_float = 0
 
+" LUA {{{
 if has('nvim-0.5')
 lua << LUA_END
+vim.diagnostic.config({ virtual_text = true })
+
+require('lualine').setup{
+    options = {
+        theme = 'powerline',
+    },
+    tabline = {
+        lualine_a = {
+            {
+                'tabs',
+                max_length = function() return vim.o.columns end,
+                mode = 2
+            }
+        },
+    },
+    sections = {
+        lualine_c = {
+            {
+                'filename',
+                file_status = true,
+                newfile_status = true,
+                path = 3,
+            }
+        },
+    },
+}
 
 require('telescope').setup{}
 
@@ -250,7 +309,7 @@ cmp.setup {
 
     experimental = {
       -- native_menu = true,
-      ghost_text = true,
+      -- ghost_text = true,
     };
 
     view = {
@@ -267,11 +326,72 @@ cmp.setup {
     );
 }
 
--- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local lspconfig = require('lspconfig')
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
-require'lspconfig'.phpactor.setup{ on_attach = on_attach, capabilities = capabilities }
-require'lspconfig'.tsserver.setup{ on_attach = on_attach, capabilities = capabilities }
-require'lspconfig'.rust_analyzer.setup{ on_attach = on_attach, capabilities = capabilities }
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+local lspservers = {
+    'phpactor',
+    -- 'psalm',
+    'ts_ls',
+    'eslint',
+    -- 'stylelint_lsp',
+    'svelte',
+    'html',
+    'cssls',
+    'rust_analyzer',
+    'clangd',
+    'jdtls',
+    'nixd'
+    -- , 'denols'
+    , 'gopls'
+    , 'terraformls'
+    -- , 'pyright'
+    , 'ruff'
+    , 'r_language_server'
+    -- , 'harper_ls'
+    -- , 'prosemd_lsp'
+    -- , 'astro'
+}
+
+lspconfig.pyright.setup {
+  settings = {
+    pyright = {
+      -- Using Ruff's import organizer
+      disableOrganizeImports = true,
+    },
+    python = {
+      analysis = {
+        -- Ignore all files for analysis to exclusively use Ruff for linting
+        ignore = { '*' },
+      },
+    },
+  },
+}
+
+lspconfig.harper_ls.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+        ["harper-ls"] = {
+            linters = {
+                spell_check = false,
+                sentence_capitalization = false,
+            }
+        }
+    }
+})
+
+lspconfig.astro.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+    root_dir = lspconfig.util.root_pattern(".git"),
+})
+
+for _, lspserver in ipairs(lspservers) do
+    pcall(function ()
+        lspconfig[lspserver].setup({ on_attach = on_attach, capabilities = capabilities })
+    end)
+end
 
 -- require('rust-tools').setup()
 
@@ -303,6 +423,8 @@ require'nvim-treesitter.configs'.setup {
 -- }
 
 LUA_END
+"}}}
+
 elseif has('nvim')
     set omnifunc=lsp#complete
     if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
@@ -358,6 +480,8 @@ au FileType gitcommit,html,smarty,eruby,slim,po setlocal spell
 au BufWinEnter /etc/cron.d/* set noexpandtab
 au BufWinEnter .eslintrc set ft=json
 au BufNewFile,BufRead *.prisma set ft=graphql
+au BufNewFile,BufRead */templates/*.yaml set ft=helm
+au BufNewFile,BufRead */templates/*.tpl set ft=helm
 au BufNewFile *.php :Emmet phphead
 au BufNewFile lib/modules/*.php :Emmet aethermodule
 au BufNewFile * nested call OpenClosestJsFile()
@@ -377,7 +501,8 @@ au FileType yaml set sw=2
 au Filetype vcl set cindent
 au Filetype rust noremap <buffer> <leader>f :lua vim.lsp.buf.format()<CR>
 au Filetype svelte noremap <buffer> <leader>f :lua vim.lsp.buf.format()<CR>
-au BufNewFile,BufRead .env* :Copilot disable
+" au BufNewFile,BufRead .env* :Copilot disable
+au BufNewFile,BufRead .env* let b:copilot_enabled = v:false
 " au FileType javascript setlocal foldmethod=syntax
 "}}}
 
@@ -479,7 +604,7 @@ endfunction
 set spelllang=en,nb
 set spellcapcheck=
 hi SpellBad ctermbg=52
-let g:spellfile_URL = 'http://ftp.vim.org/vim/runtime/spell'
+let g:spellfile_URL = 'https://ftp.nluug.nl/vim/runtime/spell'
 "}}}
 
 " Remappings {{{
@@ -512,6 +637,7 @@ nnoremap <F4> :call ToggleExtraGraphicalSymbols()<CR>
 map <silent> <leader>gs :Gstatus<cr>
 map <silent> <leader>gd :Gdiff<cr>
 map <leader>ge :Gedit<cr>
+map <leader>ai :CopilotChatOpen<cr>
 map <silent><leader>gr :Gread<cr>
 map <silent><leader>gb :Gblame<cr>
 map <silent><leader>gw :GBrowse!<cr>
