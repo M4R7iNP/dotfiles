@@ -105,7 +105,7 @@ Plug 'ntpeters/vim-better-whitespace'
 Plug 'benmills/vimux'
 Plug 'sbdchd/neoformat' " runs e.g. prettier
 Plug 'sjl/gundo.vim'
-Plug 'vimwiki/vimwiki'
+" Plug 'vimwiki/vimwiki'
 
 " language specific plugins
 Plug 'simeng/vim-imba', { 'for': 'imba' }
@@ -120,7 +120,7 @@ Plug 'slim-template/vim-slim', { 'for': 'slim' }
 Plug 'fgsch/vim-varnish', { 'for': 'vcl' }
 Plug 'jwalton512/vim-blade', { 'for': 'php' }
 Plug 'GutenYe/json5.vim', { 'for': ['json', 'json5'] }
-Plug 'tpope/vim-markdown', { 'for': ['markdown'] }
+" Plug 'tpope/vim-markdown', { 'for': ['markdown'] }
 " Plug 'instant-markdown/vim-instant-markdown', {'for': 'markdown', 'do': 'yarn install'}
 let g:copilot_no_tab_map = v:true
 Plug 'github/copilot.vim'
@@ -132,7 +132,7 @@ if has('nvim-0.5')
     Plug 'hrsh7th/nvim-cmp'
     Plug 'dcampos/nvim-snippy'
     Plug 'dcampos/cmp-snippy'
-    Plug 'simrat39/rust-tools.nvim', { 'for': 'rust' }
+    Plug 'mrcjkb/rustaceanvim', { 'for': 'rust' }
     Plug 'honza/vim-snippets'
     Plug 'onsails/lspkind-nvim'
 elseif has('nvim')
@@ -186,10 +186,6 @@ else
     Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 endif
 
-if has('python') || has('python3')
-    " Plug 'editorconfig/editorconfig-vim'
-endif
-
 call plug#end()
 filetype plugin indent on
 
@@ -198,7 +194,7 @@ filetype plugin indent on
 " Plugin options {{{
 let g:mta_filetypes = { 'html' : 1, 'xhtml' : 1, 'xml' : 1, 'jinja' : 1, 'smarty': 1 }
 let g:user_emmet_expandabbr_key = '<C-Y>'
-let g:user_emmet_complete_tag = 1
+" let g:user_emmet_complete_tag = 1
 let g:smarty_conceal_translated_strings = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
@@ -220,7 +216,7 @@ let g:sql_type_default = 'postgresql'
 let php_folding = 1
 let g:vimwiki_list = [{'path': '~/.wiki', 'syntax': 'markdown', 'ext': '.md'}]
 let g:vimwiki_conceal_pre = 1
-let g:vimwiki_key_mappings = { 'table_mappings': 0 }
+let g:vimwiki_key_mappings = { 'table_mappings': 0, 'links': 0 }
 let g:gutentags_ctags_extra_args = ['--output-format=e-ctags', '--options=' . $HOME . '/dotfiles/.ctags']
 let g:echodoc#enable_at_startup = 1
 let g:echodoc#type = 'virtual'
@@ -258,7 +254,7 @@ vim.diagnostic.config({ virtual_text = true })
 
 require('lualine').setup{
     options = {
-        theme = 'powerline',
+        theme = 'horizon',
     },
     tabline = {
         lualine_a = {
@@ -283,10 +279,6 @@ require('lualine').setup{
 
 require('telescope').setup{}
 
-local on_attach = function(client, bufnr)
-    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-end
-
 local cmp = require'cmp'
 cmp.setup {
     snippet = {
@@ -295,17 +287,13 @@ cmp.setup {
       end,
     },
 
-    mapping = {
+    mapping = cmp.mapping.preset.insert({
         ['<CR>'] = cmp.mapping.confirm({ select = false }),
-        ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-        ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
         ['<C-Space>'] = cmp.mapping.complete(),
-        ['<C-e>'] = cmp.mapping.abort(),
-        ['<C-Y>'] = cmp.mapping.confirm({ select = true }),
         ['<C-d>'] = cmp.mapping.scroll_docs(-4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
 
-    };
+    }),
 
     experimental = {
       -- native_menu = true,
@@ -314,7 +302,7 @@ cmp.setup {
 
     view = {
         entries = "native",
-    };
+    },
 
     sources = cmp.config.sources(
         {
@@ -323,12 +311,14 @@ cmp.setup {
         {
             { name = 'buffer' }
         }
-    );
+    ),
 }
 
-local lspconfig = require('lspconfig')
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
+vim.lsp.config('*', {
+    capabilities = capabilities,
+});
 local lspservers = {
     'phpactor',
     -- 'psalm',
@@ -338,22 +328,22 @@ local lspservers = {
     'svelte',
     'html',
     'cssls',
-    'rust_analyzer',
+    -- 'rust_analyzer',
     'clangd',
     'jdtls',
     'nixd'
     -- , 'denols'
     , 'gopls'
     , 'terraformls'
-    -- , 'pyright'
+    , 'pyright'
     , 'ruff'
     , 'r_language_server'
-    -- , 'harper_ls'
+    , 'harper_ls'
     -- , 'prosemd_lsp'
-    -- , 'astro'
+    , 'astro'
 }
 
-lspconfig.pyright.setup {
+vim.lsp.config('pyright', {
   settings = {
     pyright = {
       -- Using Ruff's import organizer
@@ -366,31 +356,34 @@ lspconfig.pyright.setup {
       },
     },
   },
-}
+})
 
-lspconfig.harper_ls.setup({
-    on_attach = on_attach,
-    capabilities = capabilities,
+vim.lsp.config('harper_ls', {
     settings = {
         ["harper-ls"] = {
             linters = {
-                spell_check = false,
-                sentence_capitalization = false,
+                SpellCheck = true,
+                SentenceCapitalization = false,
             }
         }
     }
 })
 
-lspconfig.astro.setup({
-    on_attach = on_attach,
-    capabilities = capabilities,
-    root_dir = lspconfig.util.root_pattern(".git"),
+vim.api.nvim_create_user_command('HarperAddToUserDict', function()
+    vim.lsp.buf.code_action({
+        filter = function(cmd)
+            return cmd.command == 'HarperAddToUserDict'
+        end,
+        apply = true,
+    })
+end, { desc = 'lol' })
+
+vim.lsp.config('astro', {
+    root_markers = { ".git" },
 })
 
 for _, lspserver in ipairs(lspservers) do
-    pcall(function ()
-        lspconfig[lspserver].setup({ on_attach = on_attach, capabilities = capabilities })
-    end)
+    vim.lsp.enable(lspserver)
 end
 
 -- require('rust-tools').setup()
@@ -422,12 +415,15 @@ require'nvim-treesitter.configs'.setup {
 --     '*';
 -- }
 
+require("fidget").setup {
+  -- options
+}
 LUA_END
 "}}}
 
 elseif has('nvim')
-    set omnifunc=lsp#complete
-    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+    " set omnifunc=lsp#complete
+    " if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
 endif
 
 if has('nvim-0.5')
@@ -499,6 +495,7 @@ au Filetype javascript.jsx nested call OpenCssModule()
 au Filetype javascript nested call OpenCssModule()
 au FileType yaml set sw=2
 au Filetype vcl set cindent
+au Filetype vcl noremap <buffer> <leader>f :lua vim.lsp.buf.format()<CR>
 au Filetype rust noremap <buffer> <leader>f :lua vim.lsp.buf.format()<CR>
 au Filetype svelte noremap <buffer> <leader>f :lua vim.lsp.buf.format()<CR>
 " au BufNewFile,BufRead .env* :Copilot disable
@@ -621,9 +618,11 @@ nnoremap <Space> :TSHighlightCapturesUnderCursor<CR>
 
 " Disable annoying letters
 nnoremap Q <nop>
-nnoremap K <nop>
-vnoremap K <nop>
 nnoremap ; :
+if !has('nvim-0.5')
+    nnoremap K <nop>
+    vnoremap K <nop>
+endif
 
 " Remap Esc to Tab
 nnoremap <Tab> <Esc>
@@ -652,8 +651,9 @@ map <leader>t :tabe <C-R>=expand("%:h") . "/" <CR>
 map <leader>s :split <C-R>=expand("%:h") . "/" <CR>
 map <leader>v :vsp <C-R>=expand("%:h") . "/" <CR>
 noremap <leader>f :Neoformat<CR>
-noremap <leader>minify :'<,'>!terser -m<CR>
+noremap <leader>minify :'<,'>!terser -m --module --toplevel<CR>
 noremap <leader>x :lua vim.lsp.buf.code_action()<CR>
+noremap <leader>aa :HarperAddToUserDict<CR>
 
 " Nvim's terminal
 if has('nvim')
@@ -699,21 +699,6 @@ set sidescroll=1
 
 " Improve joining lines
 set formatoptions& formatoptions+=mM
-
-" Don't highlight tabs in projects that use tabs as indentation
-if exists("g:loaded_EditorConfig")
-    function! g:SetListChars(config)
-        if has_key(a:config, "indent_style")
-            if a:config["indent_style"] == "tab"
-                set listchars=tab:\ \ ,nbsp:¶,eol:¬
-            endif
-        endif
-
-        return 0
-    endfunction
-
-    call editorconfig#AddNewHook(function('g:SetListChars'))
-endif
 
 " Improve go-to-definition and omnicompletion behavior
 " nmap g] <C-w><C-]><C-w>T
