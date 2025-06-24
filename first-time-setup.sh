@@ -103,6 +103,7 @@ ln -sf ~/dotfiles/.inputrc ~
 ln -sf ~/dotfiles/.psqlrc ~
 ln -sf ~/dotfiles/.git{config,ignore_global} ~
 ln -sf ~/dotfiles/.vimrc ~/.vim/init.vim
+ln -sf ~/dotfiles/home-manager/ .config/
 
 # Create folders for nvim
 mkdir -p \
@@ -112,7 +113,6 @@ mkdir -p \
 
 ln -sf ~/.vim ~/.config/nvim
 ln -sf ~/dotfiles/terminator.config ~/.config/terminator/config
-
 ln -s ~/dotfiles/.vimrc .config/nvim/init.vim
 
 # Install vim plugins

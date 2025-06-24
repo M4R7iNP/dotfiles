@@ -13,7 +13,8 @@ pkcon install \
     google-noto-emoji-fonts \
     parallel \
     ripgrep \
-    fd-find
+    fd-find \
+    rustup
 
 pip install --user pyright neovim
 

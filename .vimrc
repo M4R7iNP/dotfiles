@@ -106,6 +106,7 @@ Plug 'benmills/vimux'
 Plug 'sbdchd/neoformat' " runs e.g. prettier
 Plug 'sjl/gundo.vim'
 " Plug 'vimwiki/vimwiki'
+" Plug 'vuciv/golf'
 
 " language specific plugins
 Plug 'simeng/vim-imba', { 'for': 'imba' }
@@ -151,16 +152,19 @@ endif
 " Plug 'mxw/vim-jsx', { 'for': ['javascript', 'typescript'] }
 
 " ctrlp search
-if has('nvim-0.5')
+if has('nvim-0.11')
     Plug 'nvim-lualine/lualine.nvim'
     Plug 'nvim-tree/nvim-web-devicons'
     Plug 'nvim-lua/popup.nvim'
     Plug 'nvim-lua/plenary.nvim'
-    Plug 'CopilotC-Nvim/CopilotChat.nvim'
     Plug 'j-hui/fidget.nvim'
     Plug 'nvim-telescope/telescope.nvim'
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
     Plug 'nvim-treesitter/playground'
+    Plug 'olimorris/codecompanion.nvim'
+    " Plug 'gbprod/yanky.nvim'
+    " Plug 'folke/flash.nvim'
+
     hi Identifier ctermfg=LightGray cterm=NONE
     hi link @parameter Special
     " hi @variable ctermfg=LightGray
@@ -248,7 +252,7 @@ let g:lsp_preview_float = 0
 let g:lsp_preview_float = 0
 
 " LUA {{{
-if has('nvim-0.5')
+if has('nvim-0.11')
 lua << LUA_END
 vim.diagnostic.config({ virtual_text = true })
 
@@ -619,7 +623,7 @@ nnoremap <Space> :TSHighlightCapturesUnderCursor<CR>
 " Disable annoying letters
 nnoremap Q <nop>
 nnoremap ; :
-if !has('nvim-0.5')
+if !has('nvim-0.11')
     nnoremap K <nop>
     vnoremap K <nop>
 endif
